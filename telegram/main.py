@@ -5,6 +5,9 @@ from datetime import datetime
 import webbrowser as wb
 import importlib
 
+# Weather
+import requests
+
 # Импорт настроек
 print("[LOG] Импорт ваши настроек...", end="")
 import settings
@@ -16,8 +19,14 @@ print(" Done!")
 
 chat_ids = set()
 
+main_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+button_1 = telebot.types.KeyboardButton('📉 Exchange')
+button_2 = telebot.types.KeyboardButton('⛅️ Weather')
+button_3 = telebot.types.KeyboardButton('🛠️ Settings')
+main_button.row(button_1, button_2, button_3)
+
 def update_main_button():
-    Main_Button_1 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+    setting_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     if settings.youtube_music:
         button_1 = telebot.types.KeyboardButton('🟢 YouTube')
     else:
@@ -28,10 +37,10 @@ def update_main_button():
     else:
         button_2 = telebot.types.KeyboardButton('🔴 Morning')
     
-    Main_Button_1.row(button_1, button_2)
-    return Main_Button_1
+    setting_button.row(button_1, button_2)
+    return setting_button
 
-Main_Button_1 = update_main_button()
+setting_button = update_main_button()
 
 def save_settings():
     with open('settings.py', 'w') as f:
@@ -41,7 +50,7 @@ def save_settings():
 @bot.message_handler(regexp='/start')
 def start(command):
     bot.delete_message(command.chat.id, command.id)
-    # bot.send_message(command.chat.id, 'Привет, я С.О.Ф.И.Я', reply_markup=Main_Button_1)
+    bot.send_message(command.chat.id, 'Привет, я С.О.Ф.И.Я', reply_markup=main_button)
     chat_ids.add(command.chat.id)
 
 @bot.message_handler(regexp='Youtube')
@@ -50,7 +59,7 @@ def youtube(command):
     settings.youtube_music = not settings.youtube_music
     save_settings()
     updated_markup = update_main_button()
-    bot.send_message(command.chat.id, 'Настройки YouTube обновлены', reply_markup=updated_markup)
+    bot.send_message(command.chat.id, '⚙️ Настройки YouTube обновлены', reply_markup=updated_markup)
     chat_ids.add(command.chat.id)
 
 @bot.message_handler(regexp='Morning')
@@ -59,8 +68,29 @@ def morning(command):
     settings.morning = not settings.morning
     save_settings()
     updated_markup = update_main_button()
-    bot.send_message(command.chat.id, 'Настройки Morning обновлены', reply_markup=updated_markup)
+    bot.send_message(command.chat.id, '⚙️ Настройки Morning обновлены', reply_markup=updated_markup)
     chat_ids.add(command.chat.id)
+
+@bot.message_handler(regexp="Weather")
+def weather(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        city = "Якутск"
+        response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid=942343b4877c75d7775a5cda76fd1bc6&units=metric")
+        data = response.json()
+        bot.send_message(command.chat.id, f"⛅️ Погода в {city}: {data['main']['temp']}°C")
+    except:
+        bot.send_message(command.chat.id, "🛑 Не удалось получить данные о погоде")
+
+@bot.message_handler(regexp="Exchange")
+def exchange(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        response = requests.get('https://api.exchangerate-api.com/v4/latest/USD')
+        data = response.json()
+        bot.send_message(command.chat.id, f"💸 1 USD = {data['rates']['RUB']} RUB")
+    except:
+        bot.reply_to(command, "🛑 Не удалось получить курс валют")
 
 def send_messages():
     while True:
