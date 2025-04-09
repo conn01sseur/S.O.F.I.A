@@ -15,13 +15,21 @@ bot.remove_webhook()
 
 chat_ids = set()
 
+# 1 страница
 main_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 button_1 = telebot.types.KeyboardButton('📉 Exchange')
 button_2 = telebot.types.KeyboardButton('⛅️ Weather')
 button_3 = telebot.types.KeyboardButton('🛠️ Settings')
+button_4 = telebot.types.KeyboardButton('➡️ 2 страница')
+button_5 = telebot.types.KeyboardButton('⬅️ 3 страница')
 main_button.row(button_1, button_2, button_3)
 
-def update_main_button()
+# 2 страница
+main_button_2 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+button_1 = telebot.types.KeyboardButton('')
+button_2 = telebot.types.KeyboardButton('')
+
+def update_main_button():
     print("[LOG] Updating settings keyboard...")
     setting_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     if settings.youtube_music:
