@@ -6,14 +6,12 @@ import webbrowser as wb
 import requests
 
 # Импорт настроек
-print("[LOG] Importing settings...", end="")
+print("[LOG] Importing settings...")
 import settings
-print(" Done!")
 
-print("[LOG] Connecting bot token...", end="")
+print("[LOG] Connecting bot token...")
 bot = telebot.TeleBot('7285599484:AAECj2fMmK_B60tUxLDF_wcfFVCs1vfO-vc')
 bot.remove_webhook()
-print(" Done!")
 
 chat_ids = set()
 
@@ -23,7 +21,7 @@ button_2 = telebot.types.KeyboardButton('⛅️ Weather')
 button_3 = telebot.types.KeyboardButton('🛠️ Settings')
 main_button.row(button_1, button_2, button_3)
 
-def update_main_button():
+def update_main_button()
     print("[LOG] Updating settings keyboard...")
     setting_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     if settings.youtube_music:
