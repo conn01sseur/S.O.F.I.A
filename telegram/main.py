@@ -20,9 +20,10 @@ main_button_1 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 button_1 = telebot.types.KeyboardButton('📉 Exchange')
 button_2 = telebot.types.KeyboardButton('⛅️ Weather')
 button_3 = telebot.types.KeyboardButton('🛠️ Settings')
+button_4 = telebot.types.KeyboardButton('ℹ️ My info')
 button_page_1 = telebot.types.KeyboardButton('➡️ 2 страница')
 button_page_2 = telebot.types.KeyboardButton('⬅️ 3 страница')
-main_button_1.row(button_1, button_2, button_3)
+main_button_1.row(button_4, button_1, button_2, button_3)
 main_button_1.row(button_page_2, button_page_1)
 
 # 2 страница
@@ -57,6 +58,20 @@ button_page_2 = telebot.types.KeyboardButton('⬅️ 3 страница')
 main_button_4.row(button_1, button_2, button_3)
 main_button_4.row(button_4, button_5)
 main_button_4.row(button_page_2, button_page_1)
+
+music_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+button_1 = telebot.types.KeyboardButton('🛞 Phonk')
+button_2 = telebot.types.KeyboardButton('🌚 Аtmospheric phonk')
+button_3 = telebot.types.KeyboardButton('🇧🇷 Brazzilian phonk')
+button_4 = telebot.types.KeyboardButton('🎹 Piano')
+button_5 = telebot.types.KeyboardButton('🎻 Classic')
+button_6 = telebot.types.KeyboardButton('😕 Melancholy')
+button_random = telebot.types.KeyboardButton('🎲 Random')
+button_exit = telebot.types.KeyboardButton('⬅️ Exit')
+music_button.row(button_1, button_2, button_3)
+music_button.row(button_4, button_5, button_6)
+music_button.row(button_random)
+music_button.row(button_exit)
 
 # Настройки
 def update_main_button():
@@ -109,6 +124,12 @@ def page(command):
 def page(command):
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "1 страница", reply_markup=main_button_1)
+
+@bot.message_handler(regexp='Music')
+def page_music(command):
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "🔵🔴 Выбери жанр музыки", reply_markup=music_button)
+
 
 
 def save_settings():
@@ -170,6 +191,7 @@ def exchange(command):
     except Exception as e:
         print(f"[ERROR] Exchange API error: {e}")
         bot.reply_to(command, "🛑 Не удалось получить курс валют")
+
 
 def send_messages():
     print("[LOG] Starting scheduled messages service")
