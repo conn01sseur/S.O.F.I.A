@@ -36,11 +36,27 @@ main_button_2.row(button_page_2, button_page_1)
 
 # 3 страница
 main_button_3 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-button_1 = telebot.types.KeyboardButton('🏠 Home')
-button_page_1 = telebot.types.KeyboardButton('➡️ 1 страница')
+button_1 = telebot.types.KeyboardButton('⏳ Timer')
+button_2 = telebot.types.KeyboardButton('🧠 Reminder')
+button_3 = telebot.types.KeyboardButton('📆 Schedule')
+button_4 = telebot.types.KeyboardButton('📝 Notes')
+button_page_1 = telebot.types.KeyboardButton('➡️ 4 страница')
 button_page_2 = telebot.types.KeyboardButton('⬅️ 2 страница')
 main_button_3.row(button_1)
 main_button_3.row(button_page_2, button_page_1)
+
+# 4 страница
+main_button_4 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+button_1 = telebot.types.KeyboardButton('🏠 Home')
+button_2 = telebot.types.KeyboardButton('🌑 Night')
+button_3 = telebot.types.KeyboardButton('💤 Sleep')
+button_4 = telebot.types.KeyboardButton('🧠 Hmmmm')
+button_5 = telebot.types.KeyboardButton('💼 Work')
+button_page_1 = telebot.types.KeyboardButton('➡️ 1 страница')
+button_page_2 = telebot.types.KeyboardButton('⬅️ 3 страница')
+main_button_4.row(button_1, button_2, button_3)
+main_button_4.row(button_4, button_5)
+main_button_4.row(button_page_2, button_page_1)
 
 # Настройки
 def update_main_button():
@@ -78,6 +94,11 @@ def page(command):
 def page(command):
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "3 страница", reply_markup=main_button_3)
+
+@bot.message_handler(regexp='4 страница')
+def page(command):
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "4 страница", reply_markup=main_button_4)
 
 @bot.message_handler(regexp='Settings')
 def page(command):
