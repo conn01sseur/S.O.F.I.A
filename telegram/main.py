@@ -16,19 +16,33 @@ bot.remove_webhook()
 chat_ids = set()
 
 # 1 страница
-main_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+main_button_1 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 button_1 = telebot.types.KeyboardButton('📉 Exchange')
 button_2 = telebot.types.KeyboardButton('⛅️ Weather')
 button_3 = telebot.types.KeyboardButton('🛠️ Settings')
-button_4 = telebot.types.KeyboardButton('➡️ 2 страница')
-button_5 = telebot.types.KeyboardButton('⬅️ 3 страница')
-main_button.row(button_1, button_2, button_3)
+button_page_1 = telebot.types.KeyboardButton('➡️ 2 страница')
+button_page_2 = telebot.types.KeyboardButton('⬅️ 3 страница')
+main_button_1.row(button_1, button_2, button_3)
+main_button_1.row(button_page_2, button_page_1)
 
 # 2 страница
 main_button_2 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-button_1 = telebot.types.KeyboardButton('')
-button_2 = telebot.types.KeyboardButton('')
+button_1 = telebot.types.KeyboardButton('🎹 Music')
+button_2 = telebot.types.KeyboardButton('👾 Game')
+button_page_1 = telebot.types.KeyboardButton('➡️ 3 страница')
+button_page_2 = telebot.types.KeyboardButton('⬅️ 1 страница')
+main_button_2.row(button_1, button_2)
+main_button_2.row(button_page_2, button_page_1)
 
+# 3 страница
+main_button_3 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+button_1 = telebot.types.KeyboardButton('🏠 Home')
+button_page_1 = telebot.types.KeyboardButton('➡️ 1 страница')
+button_page_2 = telebot.types.KeyboardButton('⬅️ 2 страница')
+main_button_3.row(button_1)
+main_button_3.row(button_page_2, button_page_1)
+
+# Настройки
 def update_main_button():
     print("[LOG] Updating settings keyboard...")
     setting_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -42,10 +56,39 @@ def update_main_button():
     else:
         button_2 = telebot.types.KeyboardButton('🔴 Morning')
     
+    button_exit = telebot.types.KeyboardButton('⬅️ Exit')
     setting_button.row(button_1, button_2)
+    setting_button.row(button_exit)
     return setting_button
 
 setting_button = update_main_button()
+
+
+@bot.message_handler(regexp='1 страница')
+def page(command):
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "1 страница", reply_markup=main_button_1)
+
+@bot.message_handler(regexp='2 страница')
+def page(command):
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "2 страница", reply_markup=main_button_2)
+
+@bot.message_handler(regexp='3 страница')
+def page(command):
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "3 страница", reply_markup=main_button_3)
+
+@bot.message_handler(regexp='Settings')
+def page(command):
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "Настройки", reply_markup=setting_button)
+
+@bot.message_handler(regexp='Exit')
+def page(command):
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "1 страница", reply_markup=main_button_1)
+
 
 def save_settings():
     print("[LOG] Saving settings to file...")
