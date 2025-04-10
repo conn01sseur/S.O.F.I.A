@@ -141,8 +141,8 @@ def save_settings():
 @bot.message_handler(regexp='/start')
 def start(command):
     print(f"[LOG] /start command from user {command.chat.id}")
-    bot.delete_message(command.chat.id, command.id)
-    bot.send_message(command.chat.id, 'Привет, я С.О.Ф.И.Я', reply_markup=main_button)
+    #bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, 'Привет, я С.О.Ф.И.Я', reply_markup=main_button_1)
     chat_ids.add(command.chat.id)
 
 @bot.message_handler(regexp='Youtube')
@@ -192,6 +192,13 @@ def exchange(command):
         print(f"[ERROR] Exchange API error: {e}")
         bot.reply_to(command, "🛑 Не удалось получить курс валют")
 
+@bot.message_handler(regexp="Phonk")
+def music(command):
+    print(f"[LOG] Open playlist music from user {command.chat.id}")
+    try:
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDSHOkYhfOM64kiIjluM2Ni-")
+    except:
+        print(f"[ERROR] Exchange API error: {e}")
 
 def send_messages():
     print("[LOG] Starting scheduled messages service")
