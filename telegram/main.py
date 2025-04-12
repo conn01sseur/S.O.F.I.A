@@ -211,6 +211,7 @@ def music(command):
     except Exception as e:
         print(f"[ERROR] Failed to open music playlist: {str(e)}")
 
+# Page 3
 @bot.message_handler(regexp="Timer")
 def timer(command):
     pass
@@ -225,6 +226,19 @@ def schedule(command):
 
 @bot.message_handler(regexp="Notes")
 def notes(command):
+    pass
+
+# Page 4
+@bot.message_handler(regexp="Home")
+def home(command):
+    pass
+
+@bot.message_handler(regexp="Night")
+def night(command):
+    pass
+
+@bot.message_handler(regexp="Sleep")
+def sleep(command):
     pass
 
 def send_messages():
