@@ -241,6 +241,14 @@ def night(command):
 def sleep(command):
     pass
 
+@bot.message_handler(regexp="Hmmmm")
+def hmmmm(command):
+    pass
+
+@bot.message_handler(regexp="Work")
+def work(command):
+    pass
+
 def send_messages():
     print("[BACKGROUND TASK] Starting scheduled messages service")
     while True:
