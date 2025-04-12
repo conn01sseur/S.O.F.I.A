@@ -121,23 +121,11 @@ def page(command):
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "Page 4", reply_markup=main_button_4)
 
-@bot.message_handler(regexp='Settings')
-def page(command):
-    print(f"[USER ACTION] User {command.chat.id} opened Settings")
-    bot.delete_message(command.chat.id, command.id)
-    bot.send_message(command.chat.id, "Settings", reply_markup=setting_button)
-
 @bot.message_handler(regexp='Exit')
 def page(command):
     print(f"[USER ACTION] User {command.chat.id} exited current menu")
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "Page 1", reply_markup=main_button_1)
-
-@bot.message_handler(regexp='Music')
-def page_music(command):
-    print(f"[USER ACTION] User {command.chat.id} opened Music selection")
-    bot.delete_message(command.chat.id, command.id)
-    bot.send_message(command.chat.id, "🔵🔴 Select music genre", reply_markup=music_button)
 
 def save_settings():
     print("[LOG] Saving current settings to configuration file...")
@@ -173,20 +161,19 @@ def morning(command):
     bot.send_message(command.chat.id, '⚙️ Morning settings updated', reply_markup=updated_markup)
     print(f"[LOG] Morning setting changed to: {settings.morning}")
 
-@bot.message_handler(regexp="Weather")
-def weather(command):
-    print(f"[USER ACTION] User {command.chat.id} requested weather information")
+@bot.message_handler(regexp="Phonk")
+def music(command):
+    print(f"[USER ACTION] User {command.chat.id} selected Phonk music")
     try:
-        city = "Yakutsk"
-        print(f"[API REQUEST] Fetching weather data for {city}")
-        response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid=942343b4877c75d7775a5cda76fd1bc6&units=metric")
-        data = response.json()
-        bot.delete_message(command.chat.id, command.id)
-        bot.send_message(command.chat.id, f"⛅️ Weather in {city}: {data['main']['temp']}°C")
-        print(f"[API RESPONSE] Successfully retrieved weather data: {data['main']['temp']}°C")
+        print("[ACTION] Opening Phonk playlist in browser")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDSHOkYhfOM64kiIjluM2Ni-")
     except Exception as e:
-        print(f"[API ERROR] Weather API request failed: {str(e)}")
-        bot.send_message(command.chat.id, "🛑 Failed to retrieve weather data")
+        print(f"[ERROR] Failed to open music playlist: {str(e)}")
+
+# Page 1
+@bot.message_handler(regexp="My info")
+def info(command):
+    pass
 
 @bot.message_handler(regexp="Exchange")
 def exchange(command):
@@ -202,14 +189,35 @@ def exchange(command):
         print(f"[API ERROR] Exchange rate API request failed: {str(e)}")
         bot.reply_to(command, "🛑 Failed to retrieve exchange rates")
 
-@bot.message_handler(regexp="Phonk")
-def music(command):
-    print(f"[USER ACTION] User {command.chat.id} selected Phonk music")
+@bot.message_handler(regexp="Weather")
+def weather(command):
+    print(f"[USER ACTION] User {command.chat.id} requested weather information")
     try:
-        print("[ACTION] Opening Phonk playlist in browser")
-        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDSHOkYhfOM64kiIjluM2Ni-")
+        city = "Yakutsk"
+        print(f"[API REQUEST] Fetching weather data for {city}")
+        response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid=942343b4877c75d7775a5cda76fd1bc6&units=metric")
+        data = response.json()
+        bot.delete_message(command.chat.id, command.id)
+        bot.send_message(command.chat.id, f"⛅️ Weather in {city}: {data['main']['temp']}°C")
+        print(f"[API RESPONSE] Successfully retrieved weather data: {data['main']['temp']}°C")
     except Exception as e:
-        print(f"[ERROR] Failed to open music playlist: {str(e)}")
+        print(f"[API ERROR] Weather API request failed: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to retrieve weather data")
+
+@bot.message_handler(regexp='Settings')
+def page(command):
+    print(f"[USER ACTION] User {command.chat.id} opened Settings")
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "Settings", reply_markup=setting_button)
+
+# Page 2
+@bot.message_handler(regexp='Music')
+def page_music(command):
+    print(f"[USER ACTION] User {command.chat.id} opened Music selection")
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "🔵🔴 Select music genre", reply_markup=music_button)
+
+
 
 # Page 3
 @bot.message_handler(regexp="Timer")
