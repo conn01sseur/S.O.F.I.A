@@ -217,7 +217,9 @@ def page_music(command):
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "🔵🔴 Select music genre", reply_markup=music_button)
 
-
+@bot.message_handler(regexp="Game")
+def game(command):
+    pass
 
 # Page 3
 @bot.message_handler(regexp="Timer")
