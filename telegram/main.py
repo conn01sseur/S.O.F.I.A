@@ -37,12 +37,12 @@ main_button_2.row(button_page_2, button_page_1)
 print("[LOG] Creating keyboard layout - Page 3")
 main_button_3 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 button_1 = telebot.types.KeyboardButton('⏳ Timer')
-button_2 = telebot.types.KeyboardButton('🧠 Hmmmmm')
+button_2 = telebot.types.KeyboardButton('🧠 Reminder')
 button_3 = telebot.types.KeyboardButton('📆 Schedule')
 button_4 = telebot.types.KeyboardButton('📝 Notes')
 button_page_1 = telebot.types.KeyboardButton('➡️ Page 4')
 button_page_2 = telebot.types.KeyboardButton('⬅️ Page 2')
-main_button_3.row(button_1)
+main_button_3.row(button_1, button_2, button_3, button_4)
 main_button_3.row(button_page_2, button_page_1)
 
 print("[LOG] Creating keyboard layout - Page 4")
@@ -210,6 +210,22 @@ def music(command):
         wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDSHOkYhfOM64kiIjluM2Ni-")
     except Exception as e:
         print(f"[ERROR] Failed to open music playlist: {str(e)}")
+
+@bot.message_handler(regexp="Timer")
+def timer(command):
+    pass
+
+@bot.message_handler(regexp="Reminder")
+def reminder(command):
+    pass
+
+@bot.message_handler(regexp="Schedule")
+def schedule(command):
+    pass
+
+@bot.message_handler(regexp="Notes")
+def notes(command):
+    pass
 
 def send_messages():
     print("[BACKGROUND TASK] Starting scheduled messages service")
