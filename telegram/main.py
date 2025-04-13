@@ -307,24 +307,18 @@ def work(command):
 @bot.message_handler(regexp="Previous")
 def previous(command):
     bot.delete_message(command.chat.id, command.id)
-    keyboard.press(Key.media_next)
-    keyboard.release(Key.media_next)
 
 @bot.message_handler(regexp="Next")
 def next_button(command):
     bot.delete_message(command.chat.id, command.id)
-    keyboard.press(Key.media_previous)
-    keyboard.release(Key.media_previous)
 
 @bot.message_handler(regexp="Play / stop")
 def play_stop(command):
-    print("foef")
-    pyautogui.press('playpause')
+    bot.delete_message(command.chat.id, command.id)
 
 @bot.message_handler(regexp="Mute")
 def mute(command):
     bot.delete_message(command.chat.id, command.id)
-    kb.send("volume mute")
 
 def send_messages():
     print("[BACKGROUND TASK] Starting scheduled messages service")
