@@ -93,6 +93,19 @@ button_exit = telebot.types.KeyboardButton('⬅️ Exit')
 game_control.row(button_1, button_2, button_3)
 game_control.row(button_exit)
 
+print("[LOG] Creating control selection keyboard")
+control_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+button_1 = telebot.types.KeyboardButton('⏮️ Previous')
+button_2 = telebot.types.KeyboardButton('⏯️ Play / Stop')
+button_3 = telebot.types.KeyboardButton('⏭️ Next')
+button_4 = telebot.types.KeyboardButton('🔉 - Volume')
+button_5 = telebot.types.KeyboardButton('🔊 + Volume')
+button_6 = telebot.types.KeyboardButton('🔇 Mute')
+button_exit = telebot.types.KeyboardButton('⬅️ Exit')
+control_button.row(button_1, button_2, button_3)
+control_button.row(button_4, button_5, button_6)
+control_button.row(button_exit)
+
 def update_main_button():
     print("[LOG] Updating settings keyboard based on current configuration")
     setting_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -240,6 +253,11 @@ def page_music(command):
 @bot.message_handler(regexp="Game")
 def game(command):
     pass
+
+@bot.message_handler(regexp='Control')
+def control(command):
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "Control panel", reply_markup=control_button)
 
 # Page 3
 @bot.message_handler(regexp="Timer")
