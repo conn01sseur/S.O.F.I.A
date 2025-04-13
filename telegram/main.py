@@ -5,11 +5,6 @@ from datetime import datetime
 import webbrowser as wb
 import requests
 
-# player control
-from pynput.keyboard import Key, Controller
-import keyboard as kb
-import pyautogui
-
 print("[LOG] Importing settings...")
 import settings
 
