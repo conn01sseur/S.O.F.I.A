@@ -88,7 +88,10 @@ print("[LOG] Creating game control selection keyboard")
 game_control = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 button_1 = telebot.types.KeyboardButton('🎯 Select game')
 button_2 = telebot.types.KeyboardButton('🌀 Optimization')
-button_3 = telebot.types.KeyboardButton('')
+button_3 = telebot.types.KeyboardButton('🛸 Launcher')
+button_exit = telebot.types.KeyboardButton('⬅️ Exit')
+game_control.row(button_1, button_2, button_3)
+game_control.row(button_exit)
 
 def update_main_button():
     print("[LOG] Updating settings keyboard based on current configuration")
@@ -313,9 +316,11 @@ def send_messages():
 print("[SYSTEM] Starting background thread for scheduled messages")
 threading.Thread(target=send_messages, daemon=True).start()
 
-print("[SYSTEM] Starting bot polling...")
-try:
-    bot.polling()
-    print("[SYSTEM] Bot polling started successfully")
-except Exception as e:
-    print(f"[SYSTEM ERROR] Bot polling failed: {str(e)}")
+while True:
+    try:
+        print("[SYSTEM] Starting bot polling...")
+        bot.polling(none_stop=True, interval=0, timeout=20)
+    except Exception as e:
+        print(f"[ERROR] Bot crashed: {e}")
+        print("[SYSTEM] Restarting bot in 5 seconds...")
+        time.sleep(5)
