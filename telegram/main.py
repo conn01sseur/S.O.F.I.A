@@ -5,6 +5,11 @@ from datetime import datetime
 import webbrowser as wb
 import requests
 
+# player control
+from pynput.keyboard import Key, Controller
+import keyboard as kb
+import pyautogui
+
 print("[LOG] Importing settings...")
 import settings
 
@@ -13,6 +18,7 @@ bot = telebot.TeleBot('7285599484:AAECj2fMmK_B60tUxLDF_wcfFVCs1vfO-vc')
 bot.remove_webhook()
 
 chat_ids = set()
+keyboard = Controller()
 
 print("[LOG] Creating keyboard layout - Page 1")
 main_button_1 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -296,6 +302,29 @@ def hmmmm(command):
 @bot.message_handler(regexp="Work")
 def work(command):
     pass
+
+# Control button
+@bot.message_handler(regexp="Previous")
+def previous(command):
+    bot.delete_message(command.chat.id, command.id)
+    keyboard.press(Key.media_next)
+    keyboard.release(Key.media_next)
+
+@bot.message_handler(regexp="Next")
+def next_button(command):
+    bot.delete_message(command.chat.id, command.id)
+    keyboard.press(Key.media_previous)
+    keyboard.release(Key.media_previous)
+
+@bot.message_handler(regexp="Play / stop")
+def play_stop(command):
+    print("foef")
+    pyautogui.press('playpause')
+
+@bot.message_handler(regexp="Mute")
+def mute(command):
+    bot.delete_message(command.chat.id, command.id)
+    kb.send("volume mute")
 
 def send_messages():
     print("[BACKGROUND TASK] Starting scheduled messages service")
