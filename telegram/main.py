@@ -5,6 +5,8 @@ from datetime import datetime
 import webbrowser as wb
 import requests
 
+import socket
+
 print("[LOG] Importing settings...")
 import settings
 
@@ -14,6 +16,14 @@ bot.remove_webhook()
 
 chat_ids = set()
 keyboard = Controller()
+
+# socket
+host = "localhost"
+port = 8080
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind((host, port))
+server.listen(3)
 
 print("[LOG] Creating keyboard layout - Page 1")
 main_button_1 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -26,7 +36,10 @@ button_page_2 = telebot.types.KeyboardButton('⬅️ Page 3')
 main_button_1.row(button_4, button_1, button_2, button_3)
 main_button_1.row(button_page_2, button_page_1)
 
-print("[LOG] Creating keyboard layout - Page 2")
+print("[LOG] Creating key.  
+
+
+wwewboard layout - Page 2")
 main_button_2 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 button_1 = telebot.types.KeyboardButton('🎹 Music')
 button_2 = telebot.types.KeyboardButton('👾 Game')
