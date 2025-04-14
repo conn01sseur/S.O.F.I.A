@@ -36,10 +36,7 @@ button_page_2 = telebot.types.KeyboardButton('⬅️ Page 3')
 main_button_1.row(button_4, button_1, button_2, button_3)
 main_button_1.row(button_page_2, button_page_1)
 
-print("[LOG] Creating key.  
-
-
-wwewboard layout - Page 2")
+print("[LOG] Creating keyboard layout - Page 2")
 main_button_2 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 button_1 = telebot.types.KeyboardButton('🎹 Music')
 button_2 = telebot.types.KeyboardButton('👾 Game')
