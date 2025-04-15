@@ -15,7 +15,6 @@ bot = telebot.TeleBot('7285599484:AAECj2fMmK_B60tUxLDF_wcfFVCs1vfO-vc')
 bot.remove_webhook()
 
 chat_ids = set()
-keyboard = Controller()
 
 # socket
 host = "localhost"
