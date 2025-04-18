@@ -23,6 +23,9 @@ port = 8080
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((host, port))
 server.listen(3)
+print("[LOG] Server is up and running ")
+conn, addr = s.accept()
+print('Подключен:', addr)
 
 print("[LOG] Creating keyboard layout - Page 1")
 main_button_1 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -209,7 +212,7 @@ def music(command):
     print(f"[USER ACTION] User {command.chat.id} selected Phonk music")
     try:
         print("[ACTION] Opening Phonk playlist in browser")
-        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDSHOkYhfOM64kiIjluM2Ni-")
+        
     except Exception as e:
         print(f"[ERROR] Failed to open music playlist: {str(e)}")
 
