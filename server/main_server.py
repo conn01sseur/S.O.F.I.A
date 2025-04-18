@@ -4,8 +4,8 @@ import time
 from datetime import datetime
 import webbrowser as wb
 import requests
-
 import socket
+import json
 
 print("[LOG] Importing settings...")
 import settings
@@ -16,16 +16,44 @@ bot.remove_webhook()
 
 chat_ids = set()
 
-# socket
 host = "localhost"
-port = 8080
+port = 3333
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((host, port))
-server.listen(3)
-print("[LOG] Server is up and running ")
-conn, addr = s.accept()
-print('Подключен:', addr)
+def socket_server():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((host, port))
+    server.listen(5)
+    print(f"[SOCKET] Server is listening on {host}:{port}")
+    
+    while True:
+        conn, addr = server.accept()
+        print(f"[SOCKET] Connection established from {addr}")
+        
+        try:
+            data = conn.recv(1024).decode('utf-8')
+            if data:
+                print(f"[SOCKET] Received data: {data}")
+                
+                try:
+                    message_data = json.loads(data)
+                    chat_id = message_data.get('chat_id')
+                    text = message_data.get('text')
+                    
+                    if chat_id and text:
+                        bot.send_message(chat_id, f"🔌 From server: {text}")
+                        print(f"[SOCKET] Forwarded message to chat {chat_id}")
+                except json.JSONDecodeError:
+                    print("[SOCKET] Received invalid JSON data")
+                
+                conn.send("Message received by server".encode('utf-8'))
+        except Exception as e:
+            print(f"[SOCKET ERROR] {e}")
+        finally:
+            conn.close()
+
+# Запускаем сервер в отдельном потоке
+socket_thread = threading.Thread(target=socket_server, daemon=True)
+socket_thread.start()
 
 print("[LOG] Creating keyboard layout - Page 1")
 main_button_1 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
