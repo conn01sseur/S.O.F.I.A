@@ -164,7 +164,7 @@ def update_main_button():
         button_2 = telebot.types.KeyboardButton('🔴 Morning')
         print("[LOG] Morning notifications setting is currently DISABLED")
 
-    if settings.music_evening:
+    if settings.music_in_the_evening:
         button_3 = telebot.types.KeyboardButton('🟢 Music in the evening')
         print("[LOG] Music notifications setting is currently ENABLED")
     else:
@@ -247,6 +247,11 @@ def morning(command):
 @bot.message_handler(regexp='Music in the evening')
 def music_in_the_evening(command):
     bot.delete_message(command.chat.id, command.id)
+    settings.music_in_the_evening = not settings.music_in_the_evening
+    save_settings()
+    updated_markup = update_main_button()
+    bot.send_message(command.chat.id, '⚙️ Music in the evening settings updated', reply_markup=updated_markup)
+    print(f"[LOG] Music in the evening setting changed to: {settings.music_in_the_evening}")
 
 @bot.message_handler(regexp="Phonk")
 def music(command):
