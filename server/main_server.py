@@ -244,6 +244,10 @@ def morning(command):
     bot.send_message(command.chat.id, '⚙️ Morning settings updated', reply_markup=updated_markup)
     print(f"[LOG] Morning setting changed to: {settings.morning}")
 
+@bot.message_handler(regexp='Music in the evening')
+def music_in_the_evening(command):
+    bot.delete_message(command.chat.id, command.id)
+
 @bot.message_handler(regexp="Phonk")
 def music(command):
     print(f"[USER ACTION] User {command.chat.id} selected Phonk music")
