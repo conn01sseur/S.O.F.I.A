@@ -163,9 +163,18 @@ def update_main_button():
     else:
         button_2 = telebot.types.KeyboardButton('🔴 Morning')
         print("[LOG] Morning notifications setting is currently DISABLED")
+
+    if settings.music_evening:
+        button_3 = telebot.types.KeyboardButton('🟢 Music in the evening')
+        print("[LOG] Music notifications setting is currently ENABLED")
+    else:
+        button_3 = telebot.types.KeyboardButton('🔴 Music in the evening')
+        print("[LOG] Music notifications setting is currently DISABLED")
+        
     
     button_exit = telebot.types.KeyboardButton('⬅️ Exit')
     setting_button.row(button_1, button_2)
+    setting_button.row(button_3)
     setting_button.row(button_exit)
     return setting_button
 
