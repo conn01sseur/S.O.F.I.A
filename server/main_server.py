@@ -170,7 +170,6 @@ def update_main_button():
     else:
         button_3 = telebot.types.KeyboardButton('🔴 Music in the evening')
         print("[LOG] Music notifications setting is currently DISABLED")
-        
     
     button_exit = telebot.types.KeyboardButton('⬅️ Exit')
     setting_button.row(button_1, button_2)
@@ -406,7 +405,7 @@ def send_messages():
             time.sleep(60)
 
         elif current_time == "21:00":
-            print("[SCHEDULED TASK] Evening message time triggered (20:00)")
+            print("[SCHEDULED TASK] Evening message time triggered (21:00)")
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
@@ -419,7 +418,7 @@ def send_messages():
             time.sleep(60)
 
         elif current_time == "21:30":
-            print("[SCHEDULED TASK] Evening message time triggered (20:00)")
+            print("[SCHEDULED TASK] Evening message time triggered (21:30)")
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
@@ -430,7 +429,20 @@ def send_messages():
             time.sleep(60)
 
         elif current_time == "22:00":
-            print("[SCHEDULED TASK] Evening message time triggered (20:00)")
+            print("[SCHEDULED TASK] Evening message time triggered (22:00)")
+            print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "Отложи все гаджеты, лучше послушай музыку.")
+                    print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
+                    if settings.music_in_the_morning:
+                        wb.open("https://open.spotify.com/track/1Np8jXEGfnWuqAeahhyoaD?si=f40fb754ebe64b2b")
+                except Exception as e:
+                    print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
+            time.sleep(60)
+
+        elif current_time == "23:00":
+            print("[SCHEDULED TASK] Evening message time triggered (23:00)")
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
