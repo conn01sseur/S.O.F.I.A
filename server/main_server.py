@@ -51,7 +51,6 @@ def socket_server():
         finally:
             conn.close()
 
-# Запускаем сервер в отдельном потоке
 socket_thread = threading.Thread(target=socket_server, daemon=True)
 socket_thread.start()
 
@@ -382,7 +381,7 @@ def send_messages():
         now = datetime.now()
         current_time = now.strftime("%H:%M")
         
-        if current_time == "05:45":
+        if current_time == "05:30":
             print("[SCHEDULED TASK] Morning message time triggered (05:25)")
             if settings.morning:
                 print(f"[SCHEDULED TASK] Sending morning messages to {len(chat_ids)} active users")
