@@ -481,7 +481,3 @@ while True:
         print(f"[ERROR] Bot crashed: {e}")
         print("[SYSTEM] Restarting bot in 5 seconds...")
         time.sleep(5)
-
-    except OSError as e:
-        print("[ERROR] Address already in use")
-        time.sleep(5)
