@@ -414,6 +414,7 @@ def send_messages():
             for chat_id in chat_ids:
                 try:
                     bot.send_message(chat_id, "Пора по есть легкий ужин")
+                    bot.send_message(chat_id, "Пельмени или что-то иное?")
                     print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
