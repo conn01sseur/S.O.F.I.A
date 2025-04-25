@@ -16,7 +16,44 @@ bot.remove_webhook()
 
 chat_ids = set()
 
+host = "localhost"
+port = 7777
+
+def socket_server():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((host, port))
+    server.listen(5)
+    print(f"[SOCKET] Server is listening on {host}:{port}")
+    
+    while True:
+        conn, addr = server.accept()
+        print(f"[SOCKET] Connection established from {addr}")
+        
+        try:
+            data = conn.recv(1024).decode('utf-8')
+            if data:
+                print(f"[SOCKET] Received data: {data}")
+                
+                try:
+                    message_data = json.loads(data)
+                    chat_id = message_data.get('chat_id')
+                    text = message_data.get('text')
+                    
+                    if chat_id and text:
+                        bot.send_message(chat_id, f"🔌 From server: {text}")
+                        print(f"[SOCKET] Forwarded message to chat {chat_id}")
+                except json.JSONDecodeError:
+                    print("[SOCKET] Received invalid JSON data")
+                
+                conn.send("Message received by server".encode('utf-8'))
+        except Exception as e:
+            print(f"[SOCKET ERROR] {e}")
+        finally:
+            conn.close()
+
 # Запускаем сервер в отдельном потоке
+socket_thread = threading.Thread(target=socket_server, daemon=True)
+socket_thread.start()
 
 print("[LOG] Creating keyboard layout - Page 1")
 main_button_1 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -341,7 +378,7 @@ def send_messages():
         now = datetime.now()
         current_time = now.strftime("%H:%M")
         
-        if current_time == "05:49":
+        if current_time == "05:45":
             print("[SCHEDULED TASK] Morning message time triggered (05:25)")
             if settings.morning:
                 print(f"[SCHEDULED TASK] Sending morning messages to {len(chat_ids)} active users")
