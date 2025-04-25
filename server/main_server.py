@@ -17,7 +17,7 @@ bot.remove_webhook()
 chat_ids = set()
 
 host = "localhost"
-port = 3333
+port = 7777
 
 def socket_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -384,7 +384,7 @@ def send_messages():
                 print(f"[SCHEDULED TASK] Sending morning messages to {len(chat_ids)} active users")
                 for chat_id in chat_ids:
                     try:
-                        bot.send_message(chat_id, "Good morning!")
+                        bot.send_message(chat_id, "Доброе утро!")
                         print(f"[SCHEDULED MESSAGE] Sent morning message to {chat_id}")
                         if settings.youtube_music:
                             print("[ACTION] Opening morning YouTube music playlist")
