@@ -181,24 +181,28 @@ setting_button = update_main_button()
 
 @bot.message_handler(regexp='Page 1')
 def page(command):
+    chat_ids.add(command.chat.id)
     print(f"[USER ACTION] User {command.chat.id} navigated to Page 1")
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "Page 1", reply_markup=main_button_1)
 
 @bot.message_handler(regexp='Page 2')
 def page(command):
+    chat_ids.add(command.chat.id)
     print(f"[USER ACTION] User {command.chat.id} navigated to Page 2")
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "Page 2", reply_markup=main_button_2)
 
 @bot.message_handler(regexp='Page 3')
 def page(command):
+    chat_ids.add(command.chat.id)
     print(f"[USER ACTION] User {command.chat.id} navigated to Page 3")
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "Page 3", reply_markup=main_button_3)
 
 @bot.message_handler(regexp='Page 4')
 def page(command):
+    chat_ids.add(command.chat.id)
     print(f"[USER ACTION] User {command.chat.id} navigated to Page 4")
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "Page 4", reply_markup=main_button_4)
@@ -476,4 +480,8 @@ while True:
     except Exception as e:
         print(f"[ERROR] Bot crashed: {e}")
         print("[SYSTEM] Restarting bot in 5 seconds...")
+        time.sleep(5)
+
+    except OSError as e:
+        print("[ERROR] Address already in use")
         time.sleep(5)
