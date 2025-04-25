@@ -401,7 +401,8 @@ def send_messages():
             print(f"[SCHEDULED TASK] Sending bus reminders to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "Пора на автобус!")
+                    bot.send_message(chat_id, "Пора на автобус. 🚌 🏃‍♂️")
+                    bot.send_message(chat_id, "Удачной поездки!")
                     print(f"[SCHEDULED MESSAGE] Sent bus reminder to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
