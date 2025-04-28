@@ -16,40 +16,15 @@ bot.remove_webhook()
 
 chat_ids = set()
 
-host = "localhost"
+host = "185.255.135.212"
 port = 7777
 
-def socket_server():
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((host, port))
-    server.listen(5)
-    print(f"[SOCKET] Server is listening on {host}:{port}")
-    
-    while True:
-        conn, addr = server.accept()
-        print(f"[SOCKET] Connection established from {addr}")
-        
-        try:
-            data = conn.recv(1024).decode('utf-8')
-            if data:
-                print(f"[SOCKET] Received data: {data}")
-                
-                try:
-                    message_data = json.loads(data)
-                    chat_id = message_data.get('chat_id')
-                    text = message_data.get('text')
-                    
-                    if chat_id and text:
-                        bot.send_message(chat_id, f"🔌 From server: {text}")
-                        print(f"[SOCKET] Forwarded message to chat {chat_id}")
-                except json.JSONDecodeError:
-                    print("[SOCKET] Received invalid JSON data")
-                
-                conn.send("Message received by server".encode('utf-8'))
-        except Exception as e:
-            print(f"[SOCKET ERROR] {e}")
-        finally:
-            conn.close()
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind((host, port))
+server_socket.listen(3)
+client, addr = server_socket.accept()
+
+data = client_socket.recv(1024)
 
 socket_thread = threading.Thread(target=socket_server, daemon=True)
 socket_thread.start()
@@ -340,7 +315,10 @@ def notes(command):
 # Page 4
 @bot.message_handler(regexp="Home")
 def home(command):
-    pass
+    bot.delete_message(command.chat.id, command.id)
+    message = "home"
+    conn.sendall(message.encode())
+
 
 @bot.message_handler(regexp="Night")
 def night(command):
