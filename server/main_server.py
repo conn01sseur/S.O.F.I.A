@@ -316,8 +316,15 @@ def notes(command):
 @bot.message_handler(regexp="Home")
 def home(command):
     bot.delete_message(command.chat.id, command.id)
-    message = "home"
-    conn.sendall(message.encode())
+    try:
+        print(f"[USER ACTION] User {command.chat.id} sent Home command")
+        message = "home"
+        client.sendall(message.encode())
+        print(f"[SOCKET] Sent 'home' command to connected machine {addr}")
+        bot.send_message(command.chat.id, "🏠 Home command sent to connected devices")
+    except Exception as e:
+        print(f"[ERROR] Failed to send home command: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to send command to devices")
 
 
 @bot.message_handler(regexp="Night")
