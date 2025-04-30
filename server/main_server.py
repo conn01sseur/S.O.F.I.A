@@ -11,21 +11,107 @@ print("[LOG] Importing settings...")
 import settings
 
 print("[LOG] Initializing bot with API token...")
-bot = telebot.TeleBot('8084901655:AAFTjvUGoSWlD7rd-zxXtsMQF7BsvWpCRls')
+bot = telebot.TeleBot('8015669035:AAHCZoKEILAFX7ll6b_SX_Hqsg2-zjxpgiw')
 bot.remove_webhook()
 
 chat_ids = set()
 
-host = "185.255.135.212"
-port = 7777
+# Socket server configuration
+host = "localhost"
+port = 7778
 
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind((host, port))
-server_socket.listen(3)
-client, addr = server_socket.accept()
+# Global variables for socket connections
+connected_clients = []
+socket_lock = threading.Lock()
 
-data = client_socket.recv(1024)
+def socket_server():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind((host, port))
+    server.listen(5)
+    print(f"[SOCKET] Server is listening on {host}:{port}")
+    
+    while True:
+        try:
+            conn, addr = server.accept()
+            print(f"[SOCKET] Connection established from {addr}")
+            
+            with socket_lock:
+                connected_clients.append(conn)
+                
+            # Start a thread to handle the client
+            client_thread = threading.Thread(
+                target=handle_client_connection,
+                args=(conn, addr),
+                daemon=True
+            )
+            client_thread.start()
+            
+        except Exception as e:
+            print(f"[SOCKET ERROR] Server accept error: {e}")
+            break
 
+def handle_client_connection(conn, addr):
+    try:
+        while True:
+            data = conn.recv(1024).decode('utf-8')
+            if not data:
+                break
+                
+            print(f"[SOCKET] Received from {addr}: {data}")
+            
+            try:
+                message_data = json.loads(data)
+                chat_id = message_data.get('chat_id')
+                text = message_data.get('text')
+                
+                if chat_id and text:
+                    bot.send_message(chat_id, f"🔌 From {addr[0]}: {text}")
+                    print(f"[SOCKET] Forwarded message to chat {chat_id}")
+                    
+                conn.send("Message received by server".encode('utf-8'))
+                
+            except json.JSONDecodeError:
+                print("[SOCKET] Received invalid JSON data")
+                conn.send("Invalid JSON format".encode('utf-8'))
+                
+    except Exception as e:
+        print(f"[SOCKET ERROR] Client {addr} connection error: {e}")
+    finally:
+        with socket_lock:
+            if conn in connected_clients:
+                connected_clients.remove(conn)
+        conn.close()
+        print(f"[SOCKET] Connection closed with {addr}")
+
+def send_to_all_clients(message):
+    with socket_lock:
+        if not connected_clients:
+            return False, "No devices connected"
+            
+        success = 0
+        failed = 0
+        responses = []
+        
+        for client in connected_clients.copy():
+            try:
+                client.sendall(message.encode('utf-8'))
+                print(f"[SOCKET] Sent message to {client.getpeername()}")
+                success += 1
+                
+                # Optional: wait for response
+                response = client.recv(1024).decode('utf-8')
+                responses.append(response)
+                
+            except Exception as e:
+                print(f"[SOCKET ERROR] Failed to send to client: {e}")
+                failed += 1
+                # Remove disconnected client
+                connected_clients.remove(client)
+                
+        return True, f"Sent to {success} device(s), failed: {failed}. Responses: {responses}"
+
+# Start socket server thread
 socket_thread = threading.Thread(target=socket_server, daemon=True)
 socket_thread.start()
 
@@ -192,6 +278,7 @@ def save_settings():
     with open('settings.py', 'w') as f:
         f.write(f'youtube_music = {settings.youtube_music}\n')
         f.write(f'morning = {settings.morning}\n')
+        f.write(f'music_in_the_evening = {settings.music_in_the_evening}\n')
     print("[LOG] Settings successfully saved to file")
 
 @bot.message_handler(regexp='/start')
@@ -235,14 +322,23 @@ def music(command):
     print(f"[USER ACTION] User {command.chat.id} selected Phonk music")
     try:
         print("[ACTION] Opening Phonk playlist in browser")
-        
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
     except Exception as e:
         print(f"[ERROR] Failed to open music playlist: {str(e)}")
 
 # Page 1
 @bot.message_handler(regexp="My info")
 def info(command):
-    pass
+    try:
+        bot.delete_message(command.chat.id, command.id)
+        user_info = f"👤 Your Info:\n" \
+                   f"ID: {command.chat.id}\n" \
+                   f"First Name: {command.chat.first_name}\n" \
+                   f"Last Name: {command.chat.last_name}\n" \
+                   f"Username: @{command.chat.username}"
+        bot.send_message(command.chat.id, user_info)
+    except Exception as e:
+        print(f"[ERROR] Failed to get user info: {str(e)}")
 
 @bot.message_handler(regexp="Exchange")
 def exchange(command):
@@ -267,8 +363,17 @@ def weather(command):
         response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid=942343b4877c75d7775a5cda76fd1bc6&units=metric")
         data = response.json()
         bot.delete_message(command.chat.id, command.id)
-        bot.send_message(command.chat.id, f"⛅️ Weather in {city}: {data['main']['temp']}°C")
-        print(f"[API RESPONSE] Successfully retrieved weather data: {data['main']['temp']}°C")
+        
+        weather_info = (
+            f"⛅️ Weather in {city}:\n"
+            f"🌡 Temperature: {data['main']['temp']}°C\n"
+            f"💧 Humidity: {data['main']['humidity']}%\n"
+            f"🌬 Wind: {data['wind']['speed']} m/s\n"
+            f"☁️ Conditions: {data['weather'][0]['description']}"
+        )
+        
+        bot.send_message(command.chat.id, weather_info)
+        print(f"[API RESPONSE] Successfully retrieved weather data")
     except Exception as e:
         print(f"[API ERROR] Weather API request failed: {str(e)}")
         bot.send_message(command.chat.id, "🛑 Failed to retrieve weather data")
@@ -288,7 +393,8 @@ def page_music(command):
 
 @bot.message_handler(regexp="Game")
 def game(command):
-    pass
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "🎮 Game control panel", reply_markup=game_control)
 
 @bot.message_handler(regexp='Control')
 def control(command):
@@ -298,67 +404,143 @@ def control(command):
 # Page 3
 @bot.message_handler(regexp="Timer")
 def timer(command):
-    pass
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "⏳ Timer functionality will be implemented soon")
 
 @bot.message_handler(regexp="Reminder")
 def reminder(command):
-    pass
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "🧠 Reminder functionality will be implemented soon")
 
 @bot.message_handler(regexp="Schedule")
 def schedule(command):
-    pass
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "📆 Schedule functionality will be implemented soon")
 
 @bot.message_handler(regexp="Notes")
 def notes(command):
-    pass
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "📝 Notes functionality will be implemented soon")
 
-# Page 4
+# Page 4 commands
 @bot.message_handler(regexp="Home")
 def home(command):
     bot.delete_message(command.chat.id, command.id)
     try:
         print(f"[USER ACTION] User {command.chat.id} sent Home command")
-        message = "home"
-        client.sendall(message.encode())
-        print(f"[SOCKET] Sent 'home' command to connected machine {addr}")
-        bot.send_message(command.chat.id, "🏠 Home command sent to connected devices")
+        result, message = send_to_all_clients("home")
+        if result:
+            bot.send_message(command.chat.id, f"🏠 Home command sent successfully\n{message}")
+        else:
+            bot.send_message(command.chat.id, f"⚠️ {message}")
     except Exception as e:
         print(f"[ERROR] Failed to send home command: {str(e)}")
         bot.send_message(command.chat.id, "🛑 Failed to send command to devices")
 
-
 @bot.message_handler(regexp="Night")
 def night(command):
-    pass
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        result, message = send_to_all_clients("night")
+        if result:
+            bot.send_message(command.chat.id, f"🌑 Night command sent successfully\n{message}")
+        else:
+            bot.send_message(command.chat.id, f"⚠️ {message}")
+    except Exception as e:
+        print(f"[ERROR] Night command failed: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to send night command")
 
 @bot.message_handler(regexp="Sleep")
 def sleep(command):
-    pass
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        result, message = send_to_all_clients("sleep")
+        if result:
+            bot.send_message(command.chat.id, f"💤 Sleep command sent successfully\n{message}")
+        else:
+            bot.send_message(command.chat.id, f"⚠️ {message}")
+    except Exception as e:
+        print(f"[ERROR] Sleep command failed: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to send sleep command")
 
 @bot.message_handler(regexp="Hmmmm")
 def hmmmm(command):
-    pass
+    bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "🤔 Hmmmm... Interesting thought!")
 
 @bot.message_handler(regexp="Work")
 def work(command):
-    pass
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        result, message = send_to_all_clients("work")
+        if result:
+            bot.send_message(command.chat.id, f"💼 Work command sent successfully\n{message}")
+        else:
+            bot.send_message(command.chat.id, f"⚠️ {message}")
+    except Exception as e:
+        print(f"[ERROR] Work command failed: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to send work command")
 
 # Control button
 @bot.message_handler(regexp="Previous")
 def previous(command):
     bot.delete_message(command.chat.id, command.id)
+    try:
+        result, message = send_to_all_clients("media_previous")
+        if result:
+            bot.send_message(command.chat.id, f"⏮️ Previous track command sent\n{message}")
+    except Exception as e:
+        print(f"[ERROR] Previous command failed: {str(e)}")
 
 @bot.message_handler(regexp="Next")
 def next_button(command):
     bot.delete_message(command.chat.id, command.id)
+    try:
+        result, message = send_to_all_clients("media_next")
+        if result:
+            bot.send_message(command.chat.id, f"⏭️ Next track command sent\n{message}")
+    except Exception as e:
+        print(f"[ERROR] Next command failed: {str(e)}")
 
 @bot.message_handler(regexp="Play / stop")
 def play_stop(command):
     bot.delete_message(command.chat.id, command.id)
+    try:
+        result, message = send_to_all_clients("media_play_pause")
+        if result:
+            bot.send_message(command.chat.id, f"⏯️ Play/Pause command sent\n{message}")
+    except Exception as e:
+        print(f"[ERROR] Play/Stop command failed: {str(e)}")
 
 @bot.message_handler(regexp="Mute")
 def mute(command):
     bot.delete_message(command.chat.id, command.id)
+    try:
+        result, message = send_to_all_clients("volume_mute")
+        if result:
+            bot.send_message(command.chat.id, f"🔇 Mute command sent\n{message}")
+    except Exception as e:
+        print(f"[ERROR] Mute command failed: {str(e)}")
+
+@bot.message_handler(regexp="\+ Volume")
+def volume_up(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        result, message = send_to_all_clients("volume_up")
+        if result:
+            bot.send_message(command.chat.id, f"🔊 Volume increased\n{message}")
+    except Exception as e:
+        print(f"[ERROR] Volume up command failed: {str(e)}")
+
+@bot.message_handler(regexp="\- Volume")
+def volume_down(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        result, message = send_to_all_clients("volume_down")
+        if result:
+            bot.send_message(command.chat.id, f"🔉 Volume decreased\n{message}")
+    except Exception as e:
+        print(f"[ERROR] Volume down command failed: {str(e)}")
 
 def send_messages():
     print("[BACKGROUND TASK] Starting scheduled messages service")
@@ -367,7 +549,7 @@ def send_messages():
         current_time = now.strftime("%H:%M")
         
         if current_time == "05:30":
-            print("[SCHEDULED TASK] Morning message time triggered (05:25)")
+            print("[SCHEDULED TASK] Morning message time triggered (05:30)")
             if settings.morning:
                 print(f"[SCHEDULED TASK] Sending morning messages to {len(chat_ids)} active users")
                 for chat_id in chat_ids:
@@ -394,12 +576,13 @@ def send_messages():
             time.sleep(60)
 
         elif current_time == "13:00":
+            print("[SCHEDULED TASK] Lunch time reminder (13:00)")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "Обед")
-                    print(f"[SCHEDULED MESSAGE] Sent bus reminder to {chat_id}")
+                    bot.send_message(chat_id, "🍽 Обед")
+                    print(f"[SCHEDULED MESSAGE] Sent lunch reminder to {chat_id}")
                 except Exception as e:
-                    print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
+                    print(f"[ERROR] Failed to send lunch reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
         elif current_time == "20:00":
@@ -407,7 +590,7 @@ def send_messages():
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "Пора по есть легкий ужин")
+                    bot.send_message(chat_id, "Пора поесть легкий ужин")
                     bot.send_message(chat_id, "Пельмени или что-то иное?")
                     print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
                 except Exception as e:
@@ -438,14 +621,14 @@ def send_messages():
             time.sleep(60)
 
         elif current_time == "22:21":
-            print("[SCHEDULED TASK] Evening message time triggered (22:00)")
+            print("[SCHEDULED TASK] Evening message time triggered (22:21)")
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
                     bot.send_message(chat_id, "Отложи все гаджеты, лучше послушай музыку.")
                     print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
-                    if settings.music_in_the_morning:
-                        print("[ACTION] Opening music in the morning YouTube playlist")
+                    if settings.music_in_the_evening:
+                        print("[ACTION] Opening evening YouTube music playlist")
                         wb.open("https://www.youtube.com/watch?v=E0FQOxhAQRo")
                 except Exception as e:
                     print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
@@ -456,10 +639,10 @@ def send_messages():
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "Отложи все гаджеты, лучше послушай музыку.")
-                    print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
+                    bot.send_message(chat_id, "Пора спать! Хороших снов 😴")
+                    print(f"[SCHEDULED MESSAGE] Sent good night message to {chat_id}")
                 except Exception as e:
-                    print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
+                    print(f"[ERROR] Failed to send good night message to {chat_id}: {str(e)}")
             time.sleep(60)
 
         time.sleep(1)
@@ -467,6 +650,7 @@ def send_messages():
 print("[SYSTEM] Starting background thread for scheduled messages")
 threading.Thread(target=send_messages, daemon=True).start()
 
+print("[SYSTEM] Starting bot...")
 while True:
     try:
         print("[SYSTEM] Starting bot polling...")
