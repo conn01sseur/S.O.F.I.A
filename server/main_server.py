@@ -227,7 +227,7 @@ def update_main_button():
         button_3 = telebot.types.KeyboardButton('🔴 Music in the evening')
         print("[LOG] Music notifications setting is currently DISABLED")
     
-    if settings.music_in_the_evening:
+    if settings.rmlt:
         button_4 = telebot.types.KeyboardButton('🟢 Random my lunch time')
         print("[LOG] RMLT notifications setting is currently ENABLED")
     else:
