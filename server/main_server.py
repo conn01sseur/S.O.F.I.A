@@ -11,16 +11,14 @@ print("[LOG] Importing settings...")
 import settings
 
 print("[LOG] Initializing bot with API token...")
-bot = telebot.TeleBot('8015669035:AAHCZoKEILAFX7ll6b_SX_Hqsg2-zjxpgiw')
+bot = telebot.TeleBot('7945094960:AAHl3Gmz0XBeyRNpzBZLxGDT7H8-4oGuVn4')
 bot.remove_webhook()
 
 chat_ids = set()
 
-# Socket server configuration
 host = "localhost"
-port = 7778
+port = 7780
 
-# Global variables for socket connections
 connected_clients = []
 socket_lock = threading.Lock()
 
@@ -38,8 +36,7 @@ def socket_server():
             
             with socket_lock:
                 connected_clients.append(conn)
-                
-            # Start a thread to handle the client
+
             client_thread = threading.Thread(
                 target=handle_client_connection,
                 args=(conn, addr),
@@ -98,8 +95,7 @@ def send_to_all_clients(message):
                 client.sendall(message.encode('utf-8'))
                 print(f"[SOCKET] Sent message to {client.getpeername()}")
                 success += 1
-                
-                # Optional: wait for response
+
                 response = client.recv(1024).decode('utf-8')
                 responses.append(response)
                 
@@ -391,6 +387,11 @@ def page_music(command):
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "🔵🔴 Select music genre", reply_markup=music_button)
 
+# Music
+@bot.message_handler(regexp='Phonk')
+def music_phonk(command):
+    bot.delete_message(command.chat.id, command.id)
+
 @bot.message_handler(regexp="Game")
 def game(command):
     bot.delete_message(command.chat.id, command.id)
@@ -590,7 +591,7 @@ def send_messages():
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "Пора поесть легкий ужин")
+                    bot.send_message(chat_id, "Пора поесть легкий ужин и ПИСАТЬ ОТЧЕТ")
                     bot.send_message(chat_id, "Пельмени или что-то иное?")
                     print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
                 except Exception as e:
