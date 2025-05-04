@@ -680,11 +680,46 @@ def send_messages():
         
         if current_time == "05:30":
             print("[SCHEDULED TASK] Morning message time triggered (05:30)")
+            try:
+                print("[API REQUEST] Fetching USD to RUB exchange rate")
+                response = requests.get('https://api.exchangerate-api.com/v4/latest/USD')
+                data = response.json()
+                exchange_rate = f"💸 Курс доллара: 1 USD = {data['rates']['RUB']} RUB\n"
+                print(f"[API RESPONSE] Current exchange rate: 1 USD = {data['rates']['RUB']} RUB")
+            except Exception as e:
+                print(f"[API ERROR] Exchange rate API request failed: {str(e)}")
+                exchange_rate = "🛑 Не удалось получить курс доллара\n"
+
+            try:
+                city = "Yakutsk"
+                print(f"[API REQUEST] Fetching weather data for {city}")
+                response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid=942343b4877c75d7775a5cda76fd1bc6&units=metric")
+                data = response.json()
+                
+                weather_info = (
+                    f"⛅ Погода в {city}:\n"
+                    f"🌡 Температура: {data['main']['temp']}°C\n"
+                    f"💧 Влажность: {data['main']['humidity']}%\n"
+                    f"🌬 Ветер: {data['wind']['speed']} м/с\n"
+                    f"☁️ {data['weather'][0]['description'].capitalize()}"
+                )
+                print(f"[API RESPONSE] Successfully retrieved weather data")
+            except Exception as e:
+                print(f"[API ERROR] Weather API request failed: {str(e)}")
+                weather_info = "🛑 Не удалось получить данные о погоде"
+
+            morning_message = (
+                "🌄 Доброе утро!\n\n"
+                f"{exchange_rate}\n"
+                f"{weather_info}\n\n"
+                "Хорошего дня! ☀️"
+            )
+            
             if settings.morning:
                 print(f"[SCHEDULED TASK] Sending morning messages to {len(chat_ids)} active users")
                 for chat_id in chat_ids:
                     try:
-                        bot.send_message(chat_id, "Доброе утро!")
+                        bot.send_message(chat_id, morning_message)
                         print(f"[SCHEDULED MESSAGE] Sent morning message to {chat_id}")
                         if settings.youtube_music:
                             print("[ACTION] Opening morning YouTube music playlist")
