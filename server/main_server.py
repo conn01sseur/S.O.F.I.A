@@ -391,6 +391,135 @@ def page_music(command):
 @bot.message_handler(regexp='Phonk')
 def music_phonk(command):
     bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected Phonk music")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
+        bot.send_message(command.chat.id, "🎵 Playing Phonk music")
+    except Exception as e:
+        print(f"[ERROR] Failed to open Phonk playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open Phonk playlist")
+
+@bot.message_handler(regexp='Аtmospheric phonk')
+def music_atmospheric_phonk(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected Atmospheric Phonk")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDSVjQwB1bVqZ4k3ZJwYQ9jK")
+        bot.send_message(command.chat.id, "🌚 Playing Atmospheric Phonk")
+    except Exception as e:
+        print(f"[ERROR] Failed to open Atmospheric Phonk playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open Atmospheric Phonk playlist")
+
+@bot.message_handler(regexp='Brazzilian phonk')
+def music_brazilian_phonk(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected Brazilian Phonk")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
+        bot.send_message(command.chat.id, "🇧🇷 Playing Brazilian Phonk")
+    except Exception as e:
+        print(f"[ERROR] Failed to open Brazilian Phonk playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open Brazilian Phonk playlist")
+
+@bot.message_handler(regexp='Piano')
+def music_piano(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected Piano music")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
+        bot.send_message(command.chat.id, "🎹 Playing Piano music")
+    except Exception as e:
+        print(f"[ERROR] Failed to open Piano playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open Piano playlist")
+
+@bot.message_handler(regexp='Classic')
+def music_classic(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected Classic music")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
+        bot.send_message(command.chat.id, "🎻 Playing Classical music")
+    except Exception as e:
+        print(f"[ERROR] Failed to open Classic playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open Classic playlist")
+
+@bot.message_handler(regexp='Melancholy')
+def music_melancholy(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected Melancholy music")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
+        bot.send_message(command.chat.id, "😕 Playing Melancholy music")
+    except Exception as e:
+        print(f"[ERROR] Failed to open Melancholy playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open Melancholy playlist")
+
+@bot.message_handler(regexp='Mac_demarco')
+def music_mac_demarco(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected Mac DeMarco")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
+        bot.send_message(command.chat.id, "🙂 Playing Mac DeMarco")
+    except Exception as e:
+        print(f"[ERROR] Failed to open Mac DeMarco playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open Mac DeMarco playlist")
+
+@bot.message_handler(regexp='xz')
+def music_xz(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected xz music")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
+        bot.send_message(command.chat.id, "🎵 Playing xz selection")
+    except Exception as e:
+        print(f"[ERROR] Failed to open xz playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open xz playlist")
+
+@bot.message_handler(regexp='Mute Rock')
+def music_mute_rock(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected Mute Rock")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
+        bot.send_message(command.chat.id, "🎸 Playing Mute Rock")
+    except Exception as e:
+        print(f"[ERROR] Failed to open Mute Rock playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open Mute Rock playlist")
+
+@bot.message_handler(regexp='Rock')
+def music_rock(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected Rock")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
+        bot.send_message(command.chat.id, "🤘 Playing Rock music")
+    except Exception as e:
+        print(f"[ERROR] Failed to open Rock playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open Rock playlist")
+
+@bot.message_handler(regexp='Dead Rock')
+def music_dead_rock(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected Dead Rock")
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
+        bot.send_message(command.chat.id, "🫥 Playing Dead Rock")
+    except Exception as e:
+        print(f"[ERROR] Failed to open Dead Rock playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open Dead Rock playlist")
+
+@bot.message_handler(regexp='Random')
+def music_random(command):
+    bot.delete_message(command.chat.id, command.id)
+    try:
+        print(f"[USER ACTION] User {command.chat.id} selected Random music")
+        # You can implement random selection logic here
+        wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
+        bot.send_message(command.chat.id, "🎲 Playing Random selection")
+    except Exception as e:
+        print(f"[ERROR] Failed to open Random playlist: {str(e)}")
+        bot.send_message(command.chat.id, "🛑 Failed to open Random playlist")
 
 @bot.message_handler(regexp="Game")
 def game(command):
