@@ -291,6 +291,7 @@ def save_settings():
         f.write(f'morning = {settings.morning}\n')
         f.write(f'music_in_the_evening = {settings.music_in_the_evening}\n')
         f.write(f'rmlt = {settings.rmlt}\n')
+        f.write(f'yim = {settings.yim}\n')
     print("[LOG] Settings successfully saved to file")
 
 @bot.message_handler(regexp='/start')
@@ -331,6 +332,15 @@ def music_in_the_evening(command):
 
 @bot.message_handler(regexp='Random my lunch time')
 def RMLT(command):
+    bot.delete_message(command.chat.id, command.id)
+    settings.rmlt = not settings.rmlt
+    save_settings()
+    updated_markup = update_main_button()
+    bot.send_message(command.chat.id, '⚙️ RMLT in the evening settings updated', reply_markup=updated_markup)
+    print(f"[LOG] RMLT in the evening setting changed to: {settings.rmlt}")
+
+@bot.message_handler(regexp='yim')
+def yim(command):
     bot.delete_message(command.chat.id, command.id)
     settings.rmlt = not settings.rmlt
     save_settings()
