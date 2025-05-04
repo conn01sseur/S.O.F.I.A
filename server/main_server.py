@@ -234,9 +234,17 @@ def update_main_button():
         button_4 = telebot.types.KeyboardButton('🔴 Random my lunch time')
         print("[LOG] RMLT notifications setting is currently DISABLED")
 
+    if settings.rmlt:
+        button_5 = telebot.types.KeyboardButton('🟢 YouTube in morning')
+        print("[LOG] youtube in morning notifications setting is currently ENABLED")
+    else:
+        button_5 = telebot.types.KeyboardButton('🔴 YouTube in morning')
+        print("[LOG] youtube in morning notifications setting is currently DISABLED")
+
     button_exit = telebot.types.KeyboardButton('⬅️ Exit')
     setting_button.row(button_1, button_2)
     setting_button.row(button_3, button_4)
+    setting_button.row(button_5)
     setting_button.row(button_exit)
     return setting_button
 
@@ -695,7 +703,7 @@ def send_messages():
         now = datetime.now()
         current_time = now.strftime("%H:%M")
         
-        if current_time == "05:30":
+        if current_time == "20:46":
             print("[SCHEDULED TASK] Morning message time triggered (05:30)")
             try:
                 print("[API REQUEST] Fetching USD to RUB exchange rate")
@@ -738,7 +746,7 @@ def send_messages():
                     try:
                         bot.send_message(chat_id, morning_message)
                         print(f"[SCHEDULED MESSAGE] Sent morning message to {chat_id}")
-                        if settings.youtube_music:
+                        if settings.morning_youtube_music:
                             print("[ACTION] Opening morning YouTube music playlist")
                             wb.open("https://music.youtube.com/watch?v=dzqucn29zM4&list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
                     except Exception as e:
