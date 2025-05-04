@@ -227,9 +227,16 @@ def update_main_button():
         button_3 = telebot.types.KeyboardButton('🔴 Music in the evening')
         print("[LOG] Music notifications setting is currently DISABLED")
     
+    if settings.music_in_the_evening:
+        button_4 = telebot.types.KeyboardButton('🟢 Random my lunch time')
+        print("[LOG] RMLT notifications setting is currently ENABLED")
+    else:
+        button_4 = telebot.types.KeyboardButton('🔴 Random my lunch time')
+        print("[LOG] RMLT notifications setting is currently DISABLED")
+
     button_exit = telebot.types.KeyboardButton('⬅️ Exit')
     setting_button.row(button_1, button_2)
-    setting_button.row(button_3)
+    setting_button.row(button_3, button_4)
     setting_button.row(button_exit)
     return setting_button
 
@@ -306,6 +313,15 @@ def morning(command):
 
 @bot.message_handler(regexp='Music in the evening')
 def music_in_the_evening(command):
+    bot.delete_message(command.chat.id, command.id)
+    settings.music_in_the_evening = not settings.music_in_the_evening
+    save_settings()
+    updated_markup = update_main_button()
+    bot.send_message(command.chat.id, '⚙️ Music in the evening settings updated', reply_markup=updated_markup)
+    print(f"[LOG] Music in the evening setting changed to: {settings.music_in_the_evening}")
+
+@bot.message_handler(regexp='Random my lunch time')
+def RMLT(command):
     bot.delete_message(command.chat.id, command.id)
     settings.music_in_the_evening = not settings.music_in_the_evening
     save_settings()
@@ -740,8 +756,19 @@ def send_messages():
                     print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "13:00":
-            print("[SCHEDULED TASK] Lunch time reminder (13:00)")
+        elif current_time == "12:30":
+            print("[SCHEDULED TASK] Think about lunch time (12:30)")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "Что будем есть?")
+                    bot.send_message(chat_id, "Рандом...")
+                    print(f"[SCHEDULED MESSAGE] Sent lunch reminder to {chat_id}")
+                except Exception as e:
+                    print(f"[ERROR] Failed to send lunch reminder to {chat_id}: {str(e)}")
+            time.sleep(60)
+
+        elif current_time == "15:30":
+            print("[SCHEDULED TASK] Lunch time reminder (15:30)")
             for chat_id in chat_ids:
                 try:
                     bot.send_message(chat_id, "🍽 Обед")
