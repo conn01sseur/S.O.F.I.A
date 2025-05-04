@@ -11,13 +11,13 @@ print("[LOG] Importing settings...")
 import settings
 
 print("[LOG] Initializing bot with API token...")
-bot = telebot.TeleBot('7945094960:AAHl3Gmz0XBeyRNpzBZLxGDT7H8-4oGuVn4')
+bot = telebot.TeleBot(settings.api)
 bot.remove_webhook()
 
 chat_ids = set()
 
-host = "localhost"
-port = 7780
+host = settings.host
+port = settings.port
 
 connected_clients = []
 socket_lock = threading.Lock()
