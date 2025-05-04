@@ -324,11 +324,11 @@ def music_in_the_evening(command):
 @bot.message_handler(regexp='Random my lunch time')
 def RMLT(command):
     bot.delete_message(command.chat.id, command.id)
-    settings.music_in_the_evening = not settings.music_in_the_evening
+    settings.rmlt = not settings.rmlt
     save_settings()
     updated_markup = update_main_button()
     bot.send_message(command.chat.id, '⚙️ RMLT in the evening settings updated', reply_markup=updated_markup)
-    print(f"[LOG] RMLT in the evening setting changed to: {settings.music_in_the_evening}")
+    print(f"[LOG] RMLT in the evening setting changed to: {settings.rmlt}")
 
 @bot.message_handler(regexp="Phonk")
 def music(command):
