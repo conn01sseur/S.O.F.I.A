@@ -234,7 +234,7 @@ def update_main_button():
         button_4 = telebot.types.KeyboardButton('🔴 Random my lunch time')
         print("[LOG] RMLT notifications setting is currently DISABLED")
 
-    if settings.rmlt:
+    if settings.yim:
         button_5 = telebot.types.KeyboardButton('🟢 YouTube in morning')
         print("[LOG] youtube in morning notifications setting is currently ENABLED")
     else:
@@ -342,11 +342,11 @@ def RMLT(command):
 @bot.message_handler(regexp='yim')
 def yim(command):
     bot.delete_message(command.chat.id, command.id)
-    settings.rmlt = not settings.rmlt
+    settings.yim = not settings.yim
     save_settings()
     updated_markup = update_main_button()
-    bot.send_message(command.chat.id, '⚙️ RMLT in the evening settings updated', reply_markup=updated_markup)
-    print(f"[LOG] RMLT in the evening setting changed to: {settings.rmlt}")
+    bot.send_message(command.chat.id, '⚙️ yim in the evening settings updated', reply_markup=updated_markup)
+    print(f"[LOG] yim in the evening setting changed to: {settings.yim}")
 
 @bot.message_handler(regexp="Phonk")
 def music(command):
