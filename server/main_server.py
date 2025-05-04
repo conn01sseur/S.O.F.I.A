@@ -282,6 +282,7 @@ def save_settings():
         f.write(f'youtube_music = {settings.youtube_music}\n')
         f.write(f'morning = {settings.morning}\n')
         f.write(f'music_in_the_evening = {settings.music_in_the_evening}\n')
+        f.write(f'rmlt = {settings.rmlt}\n')
     print("[LOG] Settings successfully saved to file")
 
 @bot.message_handler(regexp='/start')
@@ -326,8 +327,8 @@ def RMLT(command):
     settings.music_in_the_evening = not settings.music_in_the_evening
     save_settings()
     updated_markup = update_main_button()
-    bot.send_message(command.chat.id, '⚙️ Music in the evening settings updated', reply_markup=updated_markup)
-    print(f"[LOG] Music in the evening setting changed to: {settings.music_in_the_evening}")
+    bot.send_message(command.chat.id, '⚙️ RMLT in the evening settings updated', reply_markup=updated_markup)
+    print(f"[LOG] RMLT in the evening setting changed to: {settings.music_in_the_evening}")
 
 @bot.message_handler(regexp="Phonk")
 def music(command):
