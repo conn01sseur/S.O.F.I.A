@@ -6,6 +6,7 @@ import webbrowser as wb
 import requests
 import socket
 import json
+import random
 
 print("[LOG] Importing settings...")
 import settings
@@ -896,7 +897,7 @@ def send_messages():
                     print(f"[ERROR] Failed to send lunch reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "15:30":
+        elif current_time == "16:11":
             print("[SCHEDULED TASK] Lunch time reminder (15:30)")
             
             for chat_id in chat_ids:
@@ -908,6 +909,7 @@ def send_messages():
                         bot.send_message(chat_id, "Крутим барабан...")
                         time.sleep(5)
                         eda = ['Пельмени', 'Яйца', 'Борщ', 'Харчо', 'Куриный суп']
+                        bot.send_message(chat_id, random.choice(eda))
 
                     else:
                         print(f'[SCHEDULED MESSAGE] Dont sent lunch reminder to {chat_id}')
