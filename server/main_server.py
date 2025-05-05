@@ -877,7 +877,7 @@ def send_messages():
             print(f"[SCHEDULED TASK] Sending pill reminders to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "Пора принять таблетку")
+                    bot.send_message(chat_id, "Пора принять ОМЕГА-3")
                     print(f"[SCHEDULED MESSAGE] Sent pill reminder to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send pill reminder to {chat_id}: {str(e)}")
