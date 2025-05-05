@@ -822,7 +822,7 @@ def send_messages():
         now = datetime.now()
         current_time = now.strftime("%H:%M")
         
-        if current_time == "20:46":
+        if current_time == "05:30":
             print("[SCHEDULED TASK] Morning message time triggered (05:30)")
             try:
                 print("[API REQUEST] Fetching USD to RUB exchange rate")
@@ -870,6 +870,17 @@ def send_messages():
                             wb.open("https://music.youtube.com/watch?v=dzqucn29zM4&list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
                     except Exception as e:
                         print(f"[ERROR] Failed to send morning message to {chat_id}: {str(e)}")
+            time.sleep(60)
+
+        elif current_time == "5:50":
+            print("[SCHEDULED TASK] Pill reminder time triggered (05:50)")
+            print(f"[SCHEDULED TASK] Sending pill reminders to {len(chat_ids)} active users")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "Пора принять таблетку")
+                    print(f"[SCHEDULED MESSAGE] Sent pill reminder to {chat_id}")
+                except Exception as e:
+                    print(f"[ERROR] Failed to send pill reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
         elif current_time == "06:20":
