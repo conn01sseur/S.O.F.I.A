@@ -576,7 +576,6 @@ def music_random(command):
     bot.delete_message(command.chat.id, command.id)
     try:
         print(f"[USER ACTION] User {command.chat.id} selected Random music")
-        # You can implement random selection logic here
         wb.open("https://music.youtube.com/playlist?list=PLJN6x0_6gGDQifOqtq1oIkj8U8XRCue6h")
         bot.send_message(command.chat.id, "🎲 Playing Random selection")
     except Exception as e:
