@@ -822,6 +822,12 @@ def send_messages():
         now = datetime.now()
         current_time = now.strftime("%H:%M")
         
+def send_messages():
+    print("[BACKGROUND TASK] Starting scheduled messages service")
+    while True:
+        now = datetime.now()
+        current_time = now.strftime("%H:%M")
+        
         if current_time == "05:30":
             print("[SCHEDULED TASK] Morning message time triggered (05:30)")
             try:
