@@ -407,11 +407,11 @@ def exchange(command):
         response = requests.get('https://api.exchangerate-api.com/v4/latest/USD')
         data = response.json()
         bot.delete_message(command.chat.id, command.id)
-        bot.send_message(command.chat.id, f"💸 1 USD = {data['rates']['RUB']} RUB")
+        bot.send_message(command.chat.id, f"💵 Курс валют:\n💲 1 USD = {data['rates']['RUB']} RUB\n💶 1 EUR = {data['rates']['RUB']/data['rates']['EUR']:.2f} RUB")
         print(f"[API RESPONSE] Current exchange rate: 1 USD = {data['rates']['RUB']} RUB")
     except Exception as e:
         print(f"[API ERROR] Exchange rate API request failed: {str(e)}")
-        bot.reply_to(command, "🛑 Failed to retrieve exchange rates")
+        bot.reply_to(command, "❌ Не удалось получить курс валют")
 
 @bot.message_handler(regexp="Weather")
 def weather(command):
@@ -424,18 +424,19 @@ def weather(command):
         bot.delete_message(command.chat.id, command.id)
         
         weather_info = (
-            f"⛅ Погода в {city}:\n"
-            f"🌡 Температура: {data['main']['temp']}°C\n"
+            f"🌤 Погода в {city}:\n"
+            f"🌡 Температура: {data['main']['temp']}°C (ощущается как {data['main']['feels_like']}°C)\n"
             f"💧 Влажность: {data['main']['humidity']}%\n"
             f"🌬 Ветер: {data['wind']['speed']} м/с\n"
-            f"☁️ {data['weather'][0]['description'].capitalize()}"
+            f"☁️ {data['weather'][0]['description'].capitalize()}\n"
+            f"🧭 Давление: {data['main']['pressure']} hPa"
         )
         
         bot.send_message(command.chat.id, weather_info)
         print(f"[API RESPONSE] Successfully retrieved weather data")
     except Exception as e:
         print(f"[API ERROR] Weather API request failed: {str(e)}")
-        bot.send_message(command.chat.id, "🛑 Failed to retrieve weather data")
+        bot.send_message(command.chat.id, "❌ Не удалось получить данные о погоде")
 
 @bot.message_handler(regexp='Settings')
 def page(command):
