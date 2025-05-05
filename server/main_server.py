@@ -903,7 +903,7 @@ def send_messages():
                     bot.send_message(chat_id, "🍽 Обед")
                     if settings.rmlt:
                         print(f"[SCHEDULED MESSAGE] Sent lunch reminder to {chat_id}")
-
+                        bot.send_message(chat_id, "Что будем кушать?")
                     else:
                         print(f'[SCHEDULED MESSAGE] Dont sent lunch reminder to {chat_id}')
                 except Exception as e:
