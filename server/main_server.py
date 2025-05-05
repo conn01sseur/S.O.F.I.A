@@ -390,11 +390,14 @@ def music(command):
 def info(command):
     try:
         bot.delete_message(command.chat.id, command.id)
-        user_info = f"👤 Your Info:\n" \
-                   f"ID: {command.chat.id}\n" \
-                   f"First Name: {command.chat.first_name}\n" \
-                   f"Last Name: {command.chat.last_name}\n" \
-                   f"Username: @{command.chat.username}"
+        user_info = (
+            f"👤 Ваша информация:\n"
+            f"🆔 ID: {command.chat.id}\n"
+            f"👤 Имя: {command.chat.first_name}\n"
+            f"👥 Фамилия: {command.chat.last_name}\n"
+            f"📛 Логин: @{command.chat.username}\n"
+            f"📅 Дата регистрации: {datetime.fromtimestamp(command.date).strftime('%Y-%m-%d %H:%M:%S')}"
+        )
         bot.send_message(command.chat.id, user_info)
     except Exception as e:
         print(f"[ERROR] Failed to get user info: {str(e)}")
@@ -604,16 +607,15 @@ def timer_menu(command):
 def timer_callback(chat_id, duration, message_id):
     try:
         print(f"[TIMER] Timer completed for user {chat_id} after {duration}")
-        bot.send_message(chat_id, f"⏰ Таймер на {duration} завершен!")
+        bot.send_message(chat_id, f"⏰ Таймер на {duration} завершен! 🔔")
         
         try:
             bot.delete_message(chat_id, message_id)
         except Exception as e:
             print(f"[TIMER WARNING] Could not delete timer selection message: {e}")
         
-        bot.send_message(chat_id, "Page 1", reply_markup=main_button_1)
+        bot.send_message(chat_id, "🔄 Возврат в главное меню", reply_markup=main_button_1)
         
-
         if chat_id in active_timers:
             del active_timers[chat_id]
             
