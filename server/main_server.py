@@ -675,7 +675,6 @@ def cancel_timer(command):
             print(f"[TIMER WARNING] No active timer found for user {chat_id}")
             bot.send_message(chat_id, "Нет активных таймеров для отмены")
             
-        # Возвращаем на главную страницу
         bot.send_message(chat_id, "Page 1", reply_markup=main_button_1)
         
     except Exception as e:
