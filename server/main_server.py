@@ -953,7 +953,7 @@ def send_messages():
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "Пора принять теплый душ/ванна")
+                    bot.send_message(chat_id, "🚿 Пора принять теплый душ/ванна")
                     print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
@@ -964,7 +964,7 @@ def send_messages():
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "Отложи все гаджеты, лучше послушай музыку.")
+                    bot.send_message(chat_id, "📵 Отложи все гаджеты, лучше послушай 🎶 музыку.")
                     print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
                     if settings.music_in_the_evening:
                         print("[ACTION] Opening evening YouTube music playlist")
@@ -978,7 +978,7 @@ def send_messages():
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "Пора спать! Хороших снов 😴")
+                    bot.send_message(chat_id, "😴 Пора спать! Хороших снов 🌙")
                     print(f"[SCHEDULED MESSAGE] Sent good night message to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send good night message to {chat_id}: {str(e)}")
