@@ -898,12 +898,17 @@ def send_messages():
 
         elif current_time == "15:30":
             print("[SCHEDULED TASK] Lunch time reminder (15:30)")
+            
             for chat_id in chat_ids:
                 try:
                     bot.send_message(chat_id, "🍽 Обед")
                     if settings.rmlt:
                         print(f"[SCHEDULED MESSAGE] Sent lunch reminder to {chat_id}")
                         bot.send_message(chat_id, "Что будем кушать?")
+                        bot.send_message(chat_id, "Крутим барабан...")
+                        time.sleep(5)
+                        eda = ['Пельмени', 'Яйца', 'Борщ', 'Харчо', 'Куриный суп']
+
                     else:
                         print(f'[SCHEDULED MESSAGE] Dont sent lunch reminder to {chat_id}')
                 except Exception as e:
