@@ -244,10 +244,10 @@ def update_main_button():
         print("[LOG] YouTube music setting is currently DISABLED")
 
     if settings.morning:
-        button_2 = telebot.types.KeyboardButton('🟢 Morning')
+        button_2 = telebot.types.KeyboardButton('🟢 Morning Script')
         print("[LOG] Morning notifications setting is currently ENABLED")
     else:
-        button_2 = telebot.types.KeyboardButton('🔴 Morning')
+        button_2 = telebot.types.KeyboardButton('🔴 Morning Script')
         print("[LOG] Morning notifications setting is currently DISABLED")
 
     if settings.music_in_the_evening:
@@ -341,7 +341,7 @@ def youtube(command):
     bot.send_message(command.chat.id, '⚙️ YouTube settings updated', reply_markup=updated_markup)
     print(f"[LOG] YouTube setting changed to: {settings.youtube_music}")
 
-@bot.message_handler(regexp='Morning')
+@bot.message_handler(regexp='Morning Script')
 def morning(command):
     print(f"[USER ACTION] User {command.chat.id} toggled Morning setting")
     bot.delete_message(command.chat.id, command.id)
