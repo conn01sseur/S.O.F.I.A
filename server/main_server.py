@@ -697,7 +697,7 @@ def notes(command):
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "📝 Notes functionality will be implemented soon")
 
-# Page 4 commands
+# Page 4
 @bot.message_handler(regexp="Home")
 def home(command):
     bot.delete_message(command.chat.id, command.id)
