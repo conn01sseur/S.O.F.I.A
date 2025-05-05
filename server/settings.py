@@ -1,4 +1,4 @@
-api = "7638208632:AAG3O8oyk18KEQA46KBrd8BN0KX78O8bZI8"
+api = "TOKEN"
 
 host = "localhost"
 port = 8080
