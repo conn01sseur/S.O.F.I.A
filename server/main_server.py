@@ -594,9 +594,94 @@ def control(command):
     bot.send_message(command.chat.id, "Control panel", reply_markup=control_button)
 
 # Page 3
+active_timers = {}
+
 @bot.message_handler(regexp="Timer")
-def timer(command):
+def timer_menu(command):
+    print(f"[USER ACTION] User {command.chat.id} opened Timer menu")
     bot.delete_message(command.chat.id, command.id)
+    bot.send_message(command.chat.id, "⏳ Выберите время для таймера:", reply_markup=timer_button)
+
+def timer_callback(chat_id, duration, message_id):
+    try:
+        print(f"[TIMER] Timer completed for user {chat_id} after {duration}")
+        bot.send_message(chat_id, f"⏰ Таймер на {duration} завершен!")
+        
+        try:
+            bot.delete_message(chat_id, message_id)
+        except Exception as e:
+            print(f"[TIMER WARNING] Could not delete timer selection message: {e}")
+        
+        bot.send_message(chat_id, "Page 1", reply_markup=main_button_1)
+        
+
+        if chat_id in active_timers:
+            del active_timers[chat_id]
+            
+    except Exception as e:
+        print(f"[TIMER ERROR] Error in timer callback for user {chat_id}: {e}")
+
+@bot.message_handler(func=lambda message: any(time in message.text for time in [
+    '1 минута', '2 минуты', '3 минуты', '5 минут', '10 минут', 
+    '15 минут', '20 минут', '25 минут', '30 минут', '40 минут',
+    '1 час', '2 часа', '3 часа', '4 часа', '5 часов', '6 часов',
+    '12 часов', '24 часа'
+]))
+def set_timer(command):
+    try:
+        chat_id = command.chat.id
+        duration_text = command.text
+        print(f"[USER ACTION] User {chat_id} set timer for {duration_text}")
+
+        bot.delete_message(chat_id, command.id)
+
+        msg = bot.send_message(chat_id, f"⏳ Таймер установлен на {duration_text}\nОтправьте 'Отмена' для отмены")
+
+        if 'минут' in duration_text:
+            seconds = int(duration_text.split()[0]) * 60
+        elif 'час' in duration_text:
+            hours = 1 if duration_text == '1 час' else int(duration_text.split()[0])
+            seconds = hours * 3600
+        else:
+            raise ValueError("Unknown time format")
+            
+        print(f"[TIMER] Parsed {duration_text} to {seconds} seconds")
+
+        if chat_id in active_timers:
+            print(f"[TIMER] Cancelling previous timer for user {chat_id}")
+            active_timers[chat_id].cancel()
+            
+        timer_thread = threading.Timer(seconds, timer_callback, args=[chat_id, duration_text, msg.message_id])
+        timer_thread.start()
+        
+        active_timers[chat_id] = timer_thread
+        print(f"[TIMER] New timer started for user {chat_id} ({duration_text})")
+        
+    except Exception as e:
+        print(f"[TIMER ERROR] Failed to set timer: {e}")
+        bot.send_message(chat_id, "🛑 Не удалось установить таймер")
+
+@bot.message_handler(regexp="Отмена")
+def cancel_timer(command):
+    try:
+        chat_id = command.chat.id
+        print(f"[USER ACTION] User {chat_id} requested timer cancellation")
+        
+        if chat_id in active_timers:
+            active_timers[chat_id].cancel()
+            del active_timers[chat_id]
+            print(f"[TIMER] Timer cancelled for user {chat_id}")
+            bot.send_message(chat_id, "Таймер отменен")
+        else:
+            print(f"[TIMER WARNING] No active timer found for user {chat_id}")
+            bot.send_message(chat_id, "Нет активных таймеров для отмены")
+            
+        # Возвращаем на главную страницу
+        bot.send_message(chat_id, "Page 1", reply_markup=main_button_1)
+        
+    except Exception as e:
+        print(f"[TIMER ERROR] Failed to cancel timer: {e}")
+        bot.send_message(chat_id, "🛑 Не удалось отменить таймер")
     
 
 @bot.message_handler(regexp="Reminder")
