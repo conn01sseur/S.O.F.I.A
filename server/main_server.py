@@ -952,8 +952,8 @@ def send_messages():
                     print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "22:21":
-            print("[SCHEDULED TASK] Evening message time triggered (22:21)")
+        elif current_time == "22:00":
+            print("[SCHEDULED TASK] Evening message time triggered (22:00)")
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
