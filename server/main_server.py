@@ -105,12 +105,10 @@ def send_to_all_clients(message):
             except Exception as e:
                 print(f"[SOCKET ERROR] Failed to send to client: {e}")
                 failed += 1
-                # Remove disconnected client
                 connected_clients.remove(client)
                 
         return True, f"Sent to {success} device(s), failed: {failed}. Responses: {responses}"
 
-# Start socket server thread
 socket_thread = threading.Thread(target=socket_server, daemon=True)
 socket_thread.start()
 
