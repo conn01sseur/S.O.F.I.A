@@ -203,6 +203,33 @@ control_button.row(button_1, button_2, button_3)
 control_button.row(button_4, button_5, button_6)
 control_button.row(button_exit)
 
+print("[LOG] Creating timer selection keyboard")
+timer_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+button_1 = telebot.types.KeyboardButton('1 минута')
+button_2 = telebot.types.KeyboardButton('2 минуты')
+button_3 = telebot.types.KeyboardButton('3 минуты')
+button_4 = telebot.types.KeyboardButton('5 минут')
+button_5 = telebot.types.KeyboardButton('10 минут')
+button_6 = telebot.types.KeyboardButton('15 минут')
+button_7 = telebot.types.KeyboardButton('20 минут')
+button_8 = telebot.types.KeyboardButton('25 минут')
+button_9 = telebot.types.KeyboardButton('30 минут')
+button_10 = telebot.types.KeyboardButton('40 минут')
+button_11 = telebot.types.KeyboardButton('1 час')
+button_12 = telebot.types.KeyboardButton('2 часа')
+button_13 = telebot.types.KeyboardButton('3 часа')
+button_14 = telebot.types.KeyboardButton('4 часа')
+button_15 = telebot.types.KeyboardButton('5 часов')
+button_16 = telebot.types.KeyboardButton('6 часов')
+button_17 = telebot.types.KeyboardButton('12 часов')
+button_18 = telebot.types.KeyboardButton('24 часа')
+button_exit = telebot.types.KeyboardButton('⬅️\nExit')
+timer_button.row(button_1, button_2, button_3, button_4, button_5)
+timer_button.row(button_6, button_7, button_8, button_9, button_10)
+timer_button.row(button_11, button_12, button_13, button_14, button_15)
+timer_button.row(button_16, button_17, button_18)
+timer_button.row(button_exit)
+
 def update_main_button():
     print("[LOG] Updating settings keyboard based on current configuration")
     setting_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -570,7 +597,7 @@ def control(command):
 @bot.message_handler(regexp="Timer")
 def timer(command):
     bot.delete_message(command.chat.id, command.id)
-    bot.send_message(command.chat.id, "⏳ Timer functionality will be implemented soon")
+    
 
 @bot.message_handler(regexp="Reminder")
 def reminder(command):
@@ -793,6 +820,7 @@ def send_messages():
                     bot.send_message(chat_id, "🍽 Обед")
                     if settings.rmlt:
                         print(f"[SCHEDULED MESSAGE] Sent lunch reminder to {chat_id}")
+
                     else:
                         print(f'[SCHEDULED MESSAGE] Dont sent lunch reminder to {chat_id}')
                 except Exception as e:
