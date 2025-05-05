@@ -791,7 +791,10 @@ def send_messages():
             for chat_id in chat_ids:
                 try:
                     bot.send_message(chat_id, "🍽 Обед")
-                    print(f"[SCHEDULED MESSAGE] Sent lunch reminder to {chat_id}")
+                    if settings.rmlt:
+                        print(f"[SCHEDULED MESSAGE] Sent lunch reminder to {chat_id}")
+                    else:
+                        print(f'[SCHEDULED MESSAGE] Dont sent lunch reminder to {chat_id}')
                 except Exception as e:
                     print(f"[ERROR] Failed to send lunch reminder to {chat_id}: {str(e)}")
             time.sleep(60)
