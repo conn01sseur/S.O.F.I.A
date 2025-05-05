@@ -237,10 +237,10 @@ def update_main_button():
     print("[LOG] Updating settings keyboard based on current configuration")
     setting_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     if settings.youtube_music:
-        button_1 = telebot.types.KeyboardButton('🟢 YouTube')
+        button_1 = telebot.types.KeyboardButton('🟢 YouTube All Time')
         print("[LOG] YouTube music setting is currently ENABLED")
     else:
-        button_1 = telebot.types.KeyboardButton('🔴 YouTube')
+        button_1 = telebot.types.KeyboardButton('🔴 YouTube All Time')
         print("[LOG] YouTube music setting is currently DISABLED")
 
     if settings.morning:
@@ -331,7 +331,7 @@ def start(command):
     chat_ids.add(command.chat.id)
     print(f"[LOG] Added user {command.chat.id} to active sessions list")
 
-@bot.message_handler(regexp='Youtube')
+@bot.message_handler(regexp='Youtube All Time')
 def youtube(command):
     print(f"[USER ACTION] User {command.chat.id} toggled YouTube setting")
     bot.delete_message(command.chat.id, command.id)
@@ -369,7 +369,7 @@ def RMLT(command):
     bot.send_message(command.chat.id, '⚙️ RMLT in the evening settings updated', reply_markup=updated_markup)
     print(f"[LOG] RMLT in the evening setting changed to: {settings.rmlt}")
 
-@bot.message_handler(regexp='yim')
+@bot.message_handler(regexp='YouTube in morning')
 def yim(command):
     bot.delete_message(command.chat.id, command.id)
     settings.yim = not settings.yim
