@@ -895,7 +895,7 @@ def send_messages():
                     print(f"[ERROR] Failed to send lunch reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "16:11":
+        elif current_time == "15:30":
             print("[SCHEDULED TASK] Lunch time reminder (15:30)")
             
             for chat_id in chat_ids:
