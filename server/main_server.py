@@ -22,6 +22,8 @@ port = settings.port
 connected_clients = []
 socket_lock = threading.Lock()
 
+active_timers = {}
+
 def socket_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -423,11 +425,11 @@ def weather(command):
         bot.delete_message(command.chat.id, command.id)
         
         weather_info = (
-            f"⛅️ Weather in {city}:\n"
-            f"🌡 Temperature: {data['main']['temp']}°C\n"
-            f"💧 Humidity: {data['main']['humidity']}%\n"
-            f"🌬 Wind: {data['wind']['speed']} m/s\n"
-            f"☁️ Conditions: {data['weather'][0]['description']}"
+            f"⛅ Погода в {city}:\n"
+            f"🌡 Температура: {data['main']['temp']}°C\n"
+            f"💧 Влажность: {data['main']['humidity']}%\n"
+            f"🌬 Ветер: {data['wind']['speed']} м/с\n"
+            f"☁️ {data['weather'][0]['description'].capitalize()}"
         )
         
         bot.send_message(command.chat.id, weather_info)
@@ -593,8 +595,6 @@ def control(command):
     bot.send_message(command.chat.id, "Control panel", reply_markup=control_button)
 
 # Page 3
-active_timers = {}
-
 @bot.message_handler(regexp="Timer")
 def timer_menu(command):
     print(f"[USER ACTION] User {command.chat.id} opened Timer menu")
