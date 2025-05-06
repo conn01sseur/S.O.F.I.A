@@ -926,7 +926,7 @@ def send_messages():
                     print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "08:00":
+        elif current_time == "08:00" and settings.ventilation_reminders:
             print("[SCHEDULED TASK] Ventilation reminder time triggered (08:00)")
             print(f"[SCHEDULED TASK] Sending ventilation reminders to {len(chat_ids)} active users")
             for chat_id in chat_ids:
@@ -943,7 +943,7 @@ def send_messages():
                     print(f"[ERROR] Failed to send ventilation reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "12:00":
+        elif current_time == "12:00" and settings.ventilation_reminders:
             print("[SCHEDULED TASK] Ventilation reminder time triggered (12:00)")
             print(f"[SCHEDULED TASK] Sending ventilation reminders to {len(chat_ids)} active users")
             for chat_id in chat_ids:
@@ -960,7 +960,7 @@ def send_messages():
                     print(f"[ERROR] Failed to send ventilation reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "18:00":
+        elif current_time == "18:00" and settings.ventilation_reminders:
             print("[SCHEDULED TASK] Ventilation reminder time triggered (18:00)")
             print(f"[SCHEDULED TASK] Sending ventilation reminders to {len(chat_ids)} active users")
             for chat_id in chat_ids:
