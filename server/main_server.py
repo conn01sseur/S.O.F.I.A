@@ -119,7 +119,7 @@ button_2 = telebot.types.KeyboardButton('⛅️\nWeather')
 button_3 = telebot.types.KeyboardButton('🛠️\nSettings')
 button_4 = telebot.types.KeyboardButton('ℹ️\nMy info')
 button_page_1 = telebot.types.KeyboardButton('➡️\nPage 2')
-button_page_2 = telebot.types.KeyboardButton('⬅️\nPage 3')
+button_page_2 = telebot.types.KeyboardButton('⬅️\nPage 4')
 main_button_1.row(button_4, button_1, button_2, button_3)
 main_button_1.row(button_page_2, button_page_1)
 
