@@ -957,6 +957,14 @@ def send_messages():
                     print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
             time.sleep(60)
 
+        elif current_time == "21:25":
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "🚿 Через 5 минут в душ")
+                except Exception as e:
+                    pass
+            time.sleep(60)
+
         elif current_time == "21:30":
             print("[SCHEDULED TASK] Evening message time triggered (21:30)")
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
