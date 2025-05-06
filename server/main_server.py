@@ -940,28 +940,6 @@ def send_messages():
                         print(f"[ERROR] Failed to send morning message to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "5:50":
-            print("[SCHEDULED TASK] Pill reminder time triggered (05:50)")
-            print(f"[SCHEDULED TASK] Sending pill reminders to {len(chat_ids)} active users")
-            for chat_id in chat_ids:
-                try:
-                    bot.send_message(chat_id, "💊 Через 5 минут пора принимать таблетки ОМЕГА-3 и витамин D3")
-                    print(f"[SCHEDULED MESSAGE] Sent pill reminder to {chat_id}")
-                except Exception as e:
-                    print(f"[ERROR] Failed to send pill reminder to {chat_id}: {str(e)}")
-            time.sleep(60)
-
-        elif current_time == "5:55":
-            print("[SCHEDULED TASK] Pill reminder time triggered (05:55)")
-            print(f"[SCHEDULED TASK] Sending pill reminders to {len(chat_ids)} active users")
-            for chat_id in chat_ids:
-                try:
-                    bot.send_message(chat_id, "💊 Пора принять таблетку ОМЕГА-3 и витамин D3")
-                    print(f"[SCHEDULED MESSAGE] Sent pill reminder to {chat_id}")
-                except Exception as e:
-                    print(f"[ERROR] Failed to send pill reminder to {chat_id}: {str(e)}")
-            time.sleep(60)
-
         elif current_time == "06:15":
             print("[SCHEDULED TASK] Bus reminder time triggered (06:15)")
             print(f"[SCHEDULED TASK] Sending bus reminders to {len(chat_ids)} active users")
@@ -984,7 +962,7 @@ def send_messages():
                     print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "08:00" and (settings.omega3_reminders or settings.vitamin_d3_reminders):
+        elif current_time == "05:45" and (settings.omega3_reminders or settings.vitamin_d3_reminders):
             print("[SCHEDULED TASK] Morning supplements reminder (08:00)")
             for chat_id in chat_ids:
                 try:
@@ -1001,7 +979,7 @@ def send_messages():
                     print(f"[ERROR] Failed to send supplements reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "12:00" and settings.omega3_reminders:
+        elif current_time == "15:30" and settings.omega3_reminders:
             print("[SCHEDULED TASK] Afternoon Omega-3 reminder (12:00)")
             for chat_id in chat_ids:
                 try:
