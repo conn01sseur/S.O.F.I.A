@@ -279,7 +279,7 @@ def update_main_button():
     button_exit = telebot.types.KeyboardButton('⬅️ Exit')
     setting_button.row(button_1, button_2)
     setting_button.row(button_3, button_4)
-    setting_button.row(button_5)
+    setting_button.row(button_5, button_6)
     setting_button.row(button_exit)
     return setting_button
 
@@ -327,6 +327,9 @@ def save_settings():
         f.write(f'music_in_the_evening = {settings.music_in_the_evening}\n')
         f.write(f'rmlt = {settings.rmlt}\n')
         f.write(f'yim = {settings.yim}\n')
+        f.write(f'ventilation_reminders = {settings.ventilation_reminders}\n')
+        f.write(f'omega3_reminders = {settings.omega3_reminders}\n')
+        f.write(f'vitamin_d3_reminders = {settings.vitamin_d3_reminders}\n')
     print("[LOG] Settings successfully saved to file")
 
 @bot.message_handler(regexp='/start')
