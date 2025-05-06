@@ -234,6 +234,7 @@ timer_button.row(button_exit)
 def update_main_button():
     print("[LOG] Updating settings keyboard based on current configuration")
     setting_button = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+    
     if settings.youtube_music:
         button_1 = telebot.types.KeyboardButton('🟢 YouTube All Time')
         print("[LOG] YouTube music setting is currently ENABLED")
@@ -276,11 +277,28 @@ def update_main_button():
         button_6 = telebot.types.KeyboardButton('🔴 Ventilation reminder')
         print("[LOG] Ventilation reminders setting is currently DISABLED")
 
+    if settings.omega3_reminders:
+        button_7 = telebot.types.KeyboardButton('🟢 Omega-3 reminders')
+        print("[LOG] Omega-3 reminders setting is currently ENABLED")
+    else:
+        button_7 = telebot.types.KeyboardButton('🔴 Omega-3 reminders')
+        print("[LOG] Omega-3 reminders setting is currently DISABLED")
+
+    if settings.vitamin_d3_reminders:
+        button_8 = telebot.types.KeyboardButton('🟢 Vitamin D3 reminders')
+        print("[LOG] Vitamin D3 reminders setting is currently ENABLED")
+    else:
+        button_8 = telebot.types.KeyboardButton('🔴 Vitamin D3 reminders')
+        print("[LOG] Vitamin D3 reminders setting is currently DISABLED")
+
     button_exit = telebot.types.KeyboardButton('⬅️ Exit')
+    
     setting_button.row(button_1, button_2)
     setting_button.row(button_3, button_4)
     setting_button.row(button_5, button_6)
+    setting_button.row(button_7, button_8)
     setting_button.row(button_exit)
+    
     return setting_button
 
 setting_button = update_main_button()
