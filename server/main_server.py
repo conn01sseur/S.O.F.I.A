@@ -837,11 +837,11 @@ def send_messages():
                 print("[API REQUEST] Fetching USD to RUB exchange rate")
                 response = requests.get('https://api.exchangerate-api.com/v4/latest/USD')
                 data = response.json()
-                exchange_rate = f"💸 Курс доллара: 1 USD = {data['rates']['RUB']} RUB\n"
+                exchange_rate = f"💵 Курс валют:\n💲 1 USD = {data['rates']['RUB']} RUB\n💶 1 EUR = {data['rates']['RUB']/data['rates']['EUR']:.2f} RUB"
                 print(f"[API RESPONSE] Current exchange rate: 1 USD = {data['rates']['RUB']} RUB")
             except Exception as e:
                 print(f"[API ERROR] Exchange rate API request failed: {str(e)}")
-                exchange_rate = "🛑 Не удалось получить курс доллара\n"
+                exchange_rate = "❌ Не удалось получить курс валют"
 
             try:
                 city = "Yakutsk"
@@ -850,22 +850,23 @@ def send_messages():
                 data = response.json()
                 
                 weather_info = (
-                    f"⛅ Погода в {city}:\n"
-                    f"🌡 Температура: {data['main']['temp']}°C\n"
+                    f"🌤 Погода в {city}:\n"
+                    f"🌡 Температура: {data['main']['temp']}°C (ощущается как {data['main']['feels_like']}°C)\n"
                     f"💧 Влажность: {data['main']['humidity']}%\n"
                     f"🌬 Ветер: {data['wind']['speed']} м/с\n"
-                    f"☁️ {data['weather'][0]['description'].capitalize()}"
+                    f"☁️ {data['weather'][0]['description'].capitalize()}\n"
+                    f"🧭 Давление: {data['main']['pressure']} hPa"
                 )
                 print(f"[API RESPONSE] Successfully retrieved weather data")
             except Exception as e:
                 print(f"[API ERROR] Weather API request failed: {str(e)}")
-                weather_info = "🛑 Не удалось получить данные о погоде"
+                weather_info = "❌ Не удалось получить данные о погоде"
 
             morning_message = (
                 "🌄 Доброе утро!\n\n"
-                f"{exchange_rate}\n"
+                f"{exchange_rate}\n\n"
                 f"{weather_info}\n\n"
-                "Хорошего дня! ☀️"
+                "☀️ Хорошего дня!"
             )
             
             if settings.morning:
@@ -881,16 +882,19 @@ def send_messages():
                         print(f"[ERROR] Failed to send morning message to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "5:45":
+        elif current_time == "5:50":
+            print("[SCHEDULED TASK] Pill reminder time triggered (05:50)")
+            print(f"[SCHEDULED TASK] Sending pill reminders to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
                     bot.send_message(chat_id, "💊 Через 5 минут пора принимать таблетки ОМЕГА-3 и витамин D3")
+                    print(f"[SCHEDULED MESSAGE] Sent pill reminder to {chat_id}")
                 except Exception as e:
-                    pass
+                    print(f"[ERROR] Failed to send pill reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "5:50":
-            print("[SCHEDULED TASK] Pill reminder time triggered (05:50)")
+        elif current_time == "5:55":
+            print("[SCHEDULED TASK] Pill reminder time triggered (05:55)")
             print(f"[SCHEDULED TASK] Sending pill reminders to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
@@ -901,14 +905,14 @@ def send_messages():
             time.sleep(60)
 
         elif current_time == "06:15":
-            print("[SCHEDULED TASK] Bus reminder time triggered (06:20)")
+            print("[SCHEDULED TASK] Bus reminder time triggered (06:15)")
             print(f"[SCHEDULED TASK] Sending bus reminders to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
                     bot.send_message(chat_id, "🚌 Через 5 минут выходить на автобус")
                     print(f"[SCHEDULED MESSAGE] Sent bus reminder to {chat_id}")
                 except Exception as e:
-                    pass
+                    print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
         elif current_time == "06:20":
@@ -916,8 +920,7 @@ def send_messages():
             print(f"[SCHEDULED TASK] Sending bus reminders to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "🚌 Пора на автобус. 🏃‍♂️")
-                    bot.send_message(chat_id, "✨ Удачной поездки!")
+                    bot.send_message(chat_id, "🚌 Пора на автобус! 🏃‍♂️\n✨ Удачной поездки!")
                     print(f"[SCHEDULED MESSAGE] Sent bus reminder to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
@@ -927,8 +930,7 @@ def send_messages():
             print("[SCHEDULED TASK] Lunch time reminder (12:30)")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "🍽 Что будем есть?")
-                    bot.send_message(chat_id, "🎲 Рандом...")
+                    bot.send_message(chat_id, "🍽 Что будем есть?\n🎲 Рандомный выбор...")
                     print(f"[SCHEDULED MESSAGE] Sent lunch reminder to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send lunch reminder to {chat_id}: {str(e)}")
@@ -938,7 +940,7 @@ def send_messages():
             print("[SCHEDULED TASK] Lunch time reminder (15:30)")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "🍽 Обед")
+                    bot.send_message(chat_id, "🍽 Обеденное время")
                     if settings.rmlt:
                         print(f"[SCHEDULED MESSAGE] Sent lunch reminder to {chat_id}")
                         bot.send_message(chat_id, "🍴 Что будем кушать?")
@@ -947,7 +949,7 @@ def send_messages():
                         eda = ['🥟 Пельмени', '🍳 Яйца', '🍲 Борщ', '🍜 Харчо', '🥣 Куриный суп']
                         bot.send_message(chat_id, random.choice(eda))
                     else:
-                        print(f'[SCHEDULED MESSAGE] Dont sent lunch reminder to {chat_id}')
+                        print(f'[SCHEDULED MESSAGE] Lunch reminder not sent to {chat_id}')
                 except Exception as e:
                     print(f"[ERROR] Failed to send lunch reminder to {chat_id}: {str(e)}")
             time.sleep(60)
@@ -957,73 +959,62 @@ def send_messages():
             print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "🍽 Пора поесть легкий ужин и 📝 ПИСАТЬ ОТЧЕТ")
-                    bot.send_message(chat_id, "🥟 Пельмени или что-то иное?")
+                    bot.send_message(chat_id, "🍽 Время легкого ужина и 📝 написания отчета\n🥟 Пельмени или что-то другое?")
                     print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
             time.sleep(60)
 
         elif current_time == "21:55":
+            print("[SCHEDULED TASK] Night mode reminder (21:55)")
+            print(f"[SCHEDULED TASK] Sending night mode reminders to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "🌙 Через 5 минут включится ночной режим.")
-                    print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
+                    bot.send_message(chat_id, "🌙 Через 5 минут включится ночной режим")
+                    print(f"[SCHEDULED MESSAGE] Sent night mode reminder to {chat_id}")
                 except Exception as e:
-                    pass
-            time.sleep(60)
-
-        elif current_time == "21:00":
-            print("[SCHEDULED TASK] Evening message time triggered (21:00)")
-            print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
-            for chat_id in chat_ids:
-                try:
-                    bot.send_message(chat_id, "🌙 Ночной режим.")
-                    bot.send_message(chat_id, "💡 Выключи яркий свет")
-                    print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
-                except Exception as e:
-                    print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
-            time.sleep(60)
-
-        elif current_time == "21:25":
-            for chat_id in chat_ids:
-                try:
-                    bot.send_message(chat_id, "🚿 Через 5 минут в душ")
-                except Exception as e:
-                    pass
-            time.sleep(60)
-
-        elif current_time == "21:30":
-            print("[SCHEDULED TASK] Evening message time triggered (21:30)")
-            print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
-            for chat_id in chat_ids:
-                try:
-                    bot.send_message(chat_id, "🚿 Пора принять теплый душ/ванна")
-                    print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
-                except Exception as e:
-                    print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
+                    print(f"[ERROR] Failed to send night mode reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
         elif current_time == "22:00":
-            print("[SCHEDULED TASK] Evening message time triggered (22:00)")
-            print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
+            print("[SCHEDULED TASK] Night mode time triggered (22:00)")
+            print(f"[SCHEDULED TASK] Sending night mode messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "📵 Отложи все гаджеты, лучше послушай 🎶 музыку.")
-                    print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
-                    if settings.music_in_the_evening:
-                        print("[ACTION] Opening evening YouTube music playlist")
-                        wb.open("https://www.youtube.com/watch?v=E0FQOxhAQRo")
+                    bot.send_message(chat_id, "🌙 Ночной режим активирован\n💡 Пожалуйста, выключи яркий свет")
+                    print(f"[SCHEDULED MESSAGE] Sent night mode message to {chat_id}")
                 except Exception as e:
-                    print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
+                    print(f"[ERROR] Failed to send night mode message to {chat_id}: {str(e)}")
+            time.sleep(60)
+
+        elif current_time == "22:25":
+            print("[SCHEDULED TASK] Shower reminder (22:25)")
+            print(f"[SCHEDULED TASK] Sending shower reminders to {len(chat_ids)} active users")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "🚿 Через 5 минут время душа")
+                    print(f"[SCHEDULED MESSAGE] Sent shower reminder to {chat_id}")
+                except Exception as e:
+                    print(f"[ERROR] Failed to send shower reminder to {chat_id}: {str(e)}")
+            time.sleep(60)
+
+        elif current_time == "22:30":
+            print("[SCHEDULED TASK] Shower time triggered (22:30)")
+            print(f"[SCHEDULED TASK] Sending shower messages to {len(chat_ids)} active users")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "🚿 Пора принять теплый душ или ванну")
+                    print(f"[SCHEDULED MESSAGE] Sent shower message to {chat_id}")
+                except Exception as e:
+                    print(f"[ERROR] Failed to send shower message to {chat_id}: {str(e)}")
             time.sleep(60)
 
         elif current_time == "23:00":
-            print("[SCHEDULED TASK] Evening message time triggered (23:00)")
-            print(f"[SCHEDULED TASK] Sending evening messages to {len(chat_ids)} active users")
+            print("[SCHEDULED TASK] Good night message time triggered (23:00)")
+            print(f"[SCHEDULED TASK] Sending good night messages to {len(chat_ids)} active users")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(chat_id, "😴 Пора спать! Хороших снов 🌙")
+                    bot.send_message(chat_id, "😴 Пора спать! Хороших снов 🌙\n🌃 Приятных сновидений!")
                     print(f"[SCHEDULED MESSAGE] Sent good night message to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send good night message to {chat_id}: {str(e)}")
