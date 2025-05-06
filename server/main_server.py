@@ -404,6 +404,26 @@ def yim(command):
     bot.send_message(command.chat.id, '⚙️ yim in the evening settings updated', reply_markup=updated_markup)
     print(f"[LOG] yim in the evening setting changed to: {settings.yim}")
 
+@bot.message_handler(regexp='Omega-3 reminders')
+def omega3_reminders(command):
+    print(f"[USER ACTION] User {command.chat.id} toggled Omega-3 reminders setting")
+    bot.delete_message(command.chat.id, command.id)
+    settings.omega3_reminders = not settings.omega3_reminders
+    save_settings()
+    updated_markup = update_main_button()
+    bot.send_message(command.chat.id, '⚙️ Omega-3 reminders settings updated', reply_markup=updated_markup)
+    print(f"[LOG] Omega-3 reminders setting changed to: {settings.omega3_reminders}")
+
+@bot.message_handler(regexp='Vitamin D3 reminders')
+def vitamin_d3_reminders(command):
+    print(f"[USER ACTION] User {command.chat.id} toggled Vitamin D3 reminders setting")
+    bot.delete_message(command.chat.id, command.id)
+    settings.vitamin_d3_reminders = not settings.vitamin_d3_reminders
+    save_settings()
+    updated_markup = update_main_button()
+    bot.send_message(command.chat.id, '⚙️ Vitamin D3 reminders settings updated', reply_markup=updated_markup)
+    print(f"[LOG] Vitamin D3 reminders setting changed to: {settings.vitamin_d3_reminders}")
+
 @bot.message_handler(regexp="Phonk")
 def music(command):
     print(f"[USER ACTION] User {command.chat.id} selected Phonk music")
@@ -954,38 +974,36 @@ def send_messages():
                     print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "08:00" and settings.ventilation_reminders:
-            print("[SCHEDULED TASK] Ventilation reminder time triggered (08:00)")
-            print(f"[SCHEDULED TASK] Sending ventilation reminders to {len(chat_ids)} active users")
+        elif current_time == "08:00" and (settings.omega3_reminders or settings.vitamin_d3_reminders):
+            print("[SCHEDULED TASK] Morning supplements reminder (08:00)")
             for chat_id in chat_ids:
                 try:
-                    bot.send_message(
-                        chat_id,
-                        "🪟 Время утреннего проветривания!\n\n"
-                        "🔹 Откройте окна на 10-15 минут\n"
-                        "🔹 Лучше полностью открыть окно на короткое время\n"
-                        "🔹 Так воздух обновится эффективнее, чем через форточку"
-                    )
-                    print(f"[SCHEDULED MESSAGE] Sent ventilation reminder to {chat_id}")
+                    message = "💊 Утренний прием добавок:\n\n"
+                    if settings.omega3_reminders:
+                        message += "🔹 Омега-3: 2 капсулы\n"
+                    if settings.vitamin_d3_reminders:
+                        message += "🔹 Витамин D3: 1 таблетка\n"
+                    message += "\nЗапейте водой во время завтрака"
+                    
+                    bot.send_message(chat_id, message)
+                    print(f"[SCHEDULED MESSAGE] Sent morning supplements reminder to {chat_id}")
                 except Exception as e:
-                    print(f"[ERROR] Failed to send ventilation reminder to {chat_id}: {str(e)}")
+                    print(f"[ERROR] Failed to send supplements reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "12:00" and settings.ventilation_reminders:
-            print("[SCHEDULED TASK] Ventilation reminder time triggered (12:00)")
-            print(f"[SCHEDULED TASK] Sending ventilation reminders to {len(chat_ids)} active users")
+        elif current_time == "12:00" and settings.omega3_reminders:
+            print("[SCHEDULED TASK] Afternoon Omega-3 reminder (12:00)")
             for chat_id in chat_ids:
                 try:
                     bot.send_message(
                         chat_id,
-                        "🌬 Дневное проветривание\n\n"
-                        "🔹 Рекомендуется 10-15 минут интенсивного проветривания\n"
-                        "🔹 Полностью откройте окна в противоположных комнатах\n"
-                        "🔹 Это создаст сквозняк для быстрого обновления воздуха"
+                        "💊 Дневной прием Омега-3:\n\n"
+                        "🔹 Омега-3: 2 капсулы\n\n"
+                        "Примите во время обеда"
                     )
-                    print(f"[SCHEDULED MESSAGE] Sent ventilation reminder to {chat_id}")
+                    print(f"[SCHEDULED MESSAGE] Sent afternoon Omega-3 reminder to {chat_id}")
                 except Exception as e:
-                    print(f"[ERROR] Failed to send ventilation reminder to {chat_id}: {str(e)}")
+                    print(f"[ERROR] Failed to send Omega-3 reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
         elif current_time == "18:00" and settings.ventilation_reminders:
