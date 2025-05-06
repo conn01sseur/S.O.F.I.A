@@ -8,3 +8,4 @@ morning = True
 music_in_the_evening = True
 rmlt = True
 yim = True
+ventilation_reminders = True

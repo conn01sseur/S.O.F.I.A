@@ -926,6 +926,57 @@ def send_messages():
                     print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
+        elif current_time == "08:00":
+            print("[SCHEDULED TASK] Ventilation reminder time triggered (08:00)")
+            print(f"[SCHEDULED TASK] Sending ventilation reminders to {len(chat_ids)} active users")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(
+                        chat_id,
+                        "🪟 Время утреннего проветривания!\n\n"
+                        "🔹 Откройте окна на 10-15 минут\n"
+                        "🔹 Лучше полностью открыть окно на короткое время\n"
+                        "🔹 Так воздух обновится эффективнее, чем через форточку"
+                    )
+                    print(f"[SCHEDULED MESSAGE] Sent ventilation reminder to {chat_id}")
+                except Exception as e:
+                    print(f"[ERROR] Failed to send ventilation reminder to {chat_id}: {str(e)}")
+            time.sleep(60)
+
+        elif current_time == "12:00":
+            print("[SCHEDULED TASK] Ventilation reminder time triggered (12:00)")
+            print(f"[SCHEDULED TASK] Sending ventilation reminders to {len(chat_ids)} active users")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(
+                        chat_id,
+                        "🌬 Дневное проветривание\n\n"
+                        "🔹 Рекомендуется 10-15 минут интенсивного проветривания\n"
+                        "🔹 Полностью откройте окна в противоположных комнатах\n"
+                        "🔹 Это создаст сквозняк для быстрого обновления воздуха"
+                    )
+                    print(f"[SCHEDULED MESSAGE] Sent ventilation reminder to {chat_id}")
+                except Exception as e:
+                    print(f"[ERROR] Failed to send ventilation reminder to {chat_id}: {str(e)}")
+            time.sleep(60)
+
+        elif current_time == "18:00":
+            print("[SCHEDULED TASK] Ventilation reminder time triggered (18:00)")
+            print(f"[SCHEDULED TASK] Sending ventilation reminders to {len(chat_ids)} active users")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(
+                        chat_id,
+                        "💨 Вечернее проветривание\n\n"
+                        "🔹 10 минут интенсивного проветривания перед сном\n"
+                        "🔹 Особенно важно в спальне\n"
+                        "🔹 Свежий воздух улучшает качество сна"
+                    )
+                    print(f"[SCHEDULED MESSAGE] Sent ventilation reminder to {chat_id}")
+                except Exception as e:
+                    print(f"[ERROR] Failed to send ventilation reminder to {chat_id}: {str(e)}")
+            time.sleep(60)
+
         elif current_time == "12:30":
             print("[SCHEDULED TASK] Lunch time reminder (12:30)")
             for chat_id in chat_ids:
