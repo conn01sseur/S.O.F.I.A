@@ -882,6 +882,14 @@ def send_messages():
             time.sleep(60)
 
         elif current_time == "5:50":
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "💊 Через 5 минут пора принимать таблетки ОМЕГА-3 и витамин D3")
+                except Exception as e:
+                    pass
+            time.sleep(60)
+
+        elif current_time == "5:50":
             print("[SCHEDULED TASK] Pill reminder time triggered (05:50)")
             print(f"[SCHEDULED TASK] Sending pill reminders to {len(chat_ids)} active users")
             for chat_id in chat_ids:
@@ -890,6 +898,17 @@ def send_messages():
                     print(f"[SCHEDULED MESSAGE] Sent pill reminder to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send pill reminder to {chat_id}: {str(e)}")
+            time.sleep(60)
+
+        elif current_time == "06:15":
+            print("[SCHEDULED TASK] Bus reminder time triggered (06:20)")
+            print(f"[SCHEDULED TASK] Sending bus reminders to {len(chat_ids)} active users")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "🚌 Через 5 минут выходить на автобус")
+                    print(f"[SCHEDULED MESSAGE] Sent bus reminder to {chat_id}")
+                except Exception as e:
+                    pass
             time.sleep(60)
 
         elif current_time == "06:20":
@@ -943,6 +962,15 @@ def send_messages():
                     print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send evening message to {chat_id}: {str(e)}")
+            time.sleep(60)
+
+        elif current_time == "21:55":
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "🌙 Через 5 минут включится ночной режим.")
+                    print(f"[SCHEDULED MESSAGE] Sent evening message to {chat_id}")
+                except Exception as e:
+                    pass
             time.sleep(60)
 
         elif current_time == "21:00":
