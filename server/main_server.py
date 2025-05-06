@@ -881,7 +881,7 @@ def send_messages():
                         print(f"[ERROR] Failed to send morning message to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "5:50":
+        elif current_time == "5:45":
             for chat_id in chat_ids:
                 try:
                     bot.send_message(chat_id, "💊 Через 5 минут пора принимать таблетки ОМЕГА-3 и витамин D3")
