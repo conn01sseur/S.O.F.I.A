@@ -936,20 +936,35 @@ def send_messages():
                     print(f"[ERROR] Failed to send lunch reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
+        elif current_time == "15:25":
+            print("[SCHEDULED TASK] Lunch time reminder (15:25)")
+            print(f"[SCHEDULED TASK] Sending lunch reminders to {len(chat_ids)} active users")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "🍽 Скоро обеденное время")
+                    print(f"[SCHEDULED MESSAGE] Sent lunch reminder to {chat_id}")
+                    
+                    if settings.rmlt:
+                        print("[SCHEDULED TASK] Random meal selection enabled")
+                        bot.send_message(chat_id, "🍴 Что будем кушать?")
+                        bot.send_message(chat_id, "🎰 Крутим барабан...")
+                        time.sleep(5)
+                        eda = ['🥟 Пельмени', '🍳 Яйца', '🍲 Борщ', '🍜 Харчо', '🥣 Куриный суп']
+                        selected_meal = random.choice(eda)
+                        bot.send_message(chat_id, selected_meal)
+                        print(f"[SCHEDULED MESSAGE] Sent random meal selection: {selected_meal} to {chat_id}")
+                    else:
+                        print(f"[SCHEDULED MESSAGE] Random meal selection disabled for {chat_id}")
+                        
+                except Exception as e:
+                    print(f"[ERROR] Failed to process lunch reminder for {chat_id}: {str(e)}")
+            time.sleep(60)
+
         elif current_time == "15:30":
             print("[SCHEDULED TASK] Lunch time reminder (15:30)")
             for chat_id in chat_ids:
                 try:
                     bot.send_message(chat_id, "🍽 Обеденное время")
-                    if settings.rmlt:
-                        print(f"[SCHEDULED MESSAGE] Sent lunch reminder to {chat_id}")
-                        bot.send_message(chat_id, "🍴 Что будем кушать?")
-                        bot.send_message(chat_id, "🎰 Крутим барабан...")
-                        time.sleep(5)
-                        eda = ['🥟 Пельмени', '🍳 Яйца', '🍲 Борщ', '🍜 Харчо', '🥣 Куриный суп']
-                        bot.send_message(chat_id, random.choice(eda))
-                    else:
-                        print(f'[SCHEDULED MESSAGE] Lunch reminder not sent to {chat_id}')
                 except Exception as e:
                     print(f"[ERROR] Failed to send lunch reminder to {chat_id}: {str(e)}")
             time.sleep(60)
