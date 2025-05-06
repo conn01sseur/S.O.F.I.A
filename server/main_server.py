@@ -264,10 +264,17 @@ def update_main_button():
 
     if settings.yim:
         button_5 = telebot.types.KeyboardButton('🟢 YouTube in morning')
-        print("[LOG] youtube in morning notifications setting is currently ENABLED")
+        print("[LOG] YouTube in morning notifications setting is currently ENABLED")
     else:
         button_5 = telebot.types.KeyboardButton('🔴 YouTube in morning')
-        print("[LOG] youtube in morning notifications setting is currently DISABLED")
+        print("[LOG] YouTube in morning notifications setting is currently DISABLED")
+
+    if settings.ventilation_reminders:
+        button_6 = telebot.types.KeyboardButton('🟢 Ventilation reminder')
+        print("[LOG] Ventilation reminders setting is currently ENABLED")
+    else:
+        button_6 = telebot.types.KeyboardButton('🔴 Ventilation reminder')
+        print("[LOG] Ventilation reminders setting is currently DISABLED")
 
     button_exit = telebot.types.KeyboardButton('⬅️ Exit')
     setting_button.row(button_1, button_2)
