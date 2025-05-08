@@ -15,7 +15,8 @@ print("[LOG] Initializing bot with API token...")
 bot = telebot.TeleBot(settings.api)
 bot.remove_webhook()
 
-chat_ids = set()
+chat_ids = {settings.chat_id}
+print(f"[SYSTEM] Added predefined chat_id {settings.chat_id} to notifications list")
 
 host = settings.host
 port = settings.port
@@ -306,6 +307,7 @@ setting_button = update_main_button()
 @bot.message_handler(regexp='Page 1')
 def page(command):
     chat_ids.add(command.chat.id)
+    save_chat_ids()
     print(f"[USER ACTION] User {command.chat.id} navigated to Page 1")
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "Page 1", reply_markup=main_button_1)
