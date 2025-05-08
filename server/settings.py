@@ -1,4 +1,5 @@
 api = "TOKEN"
+chat_id = chat
 
 host = "localhost"
 port = 8080
