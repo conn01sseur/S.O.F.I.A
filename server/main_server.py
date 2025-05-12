@@ -688,6 +688,7 @@ def timer_callback(chat_id, duration, message_id):
     '1 час', '2 часа', '3 часа', '4 часа', '5 часов', '6 часов',
     '12 часов', '24 часа'
 ]))
+
 def set_timer(command):
     try:
         chat_id = command.chat.id
