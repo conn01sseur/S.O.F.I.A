@@ -942,28 +942,6 @@ def send_messages():
                         print(f"[ERROR] Failed to send morning message to {chat_id}: {str(e)}")
             time.sleep(60)
 
-        elif current_time == "06:15":
-            print("[SCHEDULED TASK] Bus reminder time triggered (06:15)")
-            print(f"[SCHEDULED TASK] Sending bus reminders to {len(chat_ids)} active users")
-            for chat_id in chat_ids:
-                try:
-                    bot.send_message(chat_id, "🚌 Через 5 минут выходить на автобус")
-                    print(f"[SCHEDULED MESSAGE] Sent bus reminder to {chat_id}")
-                except Exception as e:
-                    print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
-            time.sleep(60)
-
-        elif current_time == "06:20":
-            print("[SCHEDULED TASK] Bus reminder time triggered (06:20)")
-            print(f"[SCHEDULED TASK] Sending bus reminders to {len(chat_ids)} active users")
-            for chat_id in chat_ids:
-                try:
-                    bot.send_message(chat_id, "🚌 Пора на автобус! 🏃‍♂️\n✨ Удачной поездки!")
-                    print(f"[SCHEDULED MESSAGE] Sent bus reminder to {chat_id}")
-                except Exception as e:
-                    print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
-            time.sleep(60)
-
         elif current_time == "05:45" and (settings.omega3_reminders or settings.vitamin_d3_reminders):
             print("[SCHEDULED TASK] Morning supplements reminder (08:00)")
             for chat_id in chat_ids:
@@ -979,6 +957,27 @@ def send_messages():
                     print(f"[SCHEDULED MESSAGE] Sent morning supplements reminder to {chat_id}")
                 except Exception as e:
                     print(f"[ERROR] Failed to send supplements reminder to {chat_id}: {str(e)}")
+            time.sleep(60)
+
+        elif current_time == "06:00" and settings.time_reminder:
+            print("[SCHEDULED TASK] Time reminder (06:00)")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "Время уже 6:00")
+                    print(f"[SCHEDULED MESSAGE] Sent time reminder to {chat_id}")
+                except Exception as e:
+                    print(f"[ERROR] Failed to send time reminder to {chat_id}: {str(e)}")
+            time.sleep(60)
+
+        elif current_time == "06:15":
+            print("[SCHEDULED TASK] Bus reminder time triggered (06:15)")
+            print(f"[SCHEDULED TASK] Sending bus reminders to {len(chat_ids)} active users")
+            for chat_id in chat_ids:
+                try:
+                    bot.send_message(chat_id, "🚌 Через 5 минут выходить на автобус")
+                    print(f"[SCHEDULED MESSAGE] Sent bus reminder to {chat_id}")
+                except Exception as e:
+                    print(f"[ERROR] Failed to send bus reminder to {chat_id}: {str(e)}")
             time.sleep(60)
 
         elif current_time == "15:30" and settings.omega3_reminders:

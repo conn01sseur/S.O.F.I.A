@@ -1,5 +1,5 @@
 api = "TOKEN"
-chat_id = chat
+chat_id = 877378366
 
 host = "localhost"
 port = 8080
@@ -12,3 +12,4 @@ yim = True
 ventilation_reminders = True
 omega3_reminders = True
 vitamin_d3_reminders = True
+time_reminder = True
