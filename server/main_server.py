@@ -305,6 +305,7 @@ def update_main_button():
     setting_button.row(button_3, button_4)
     setting_button.row(button_5, button_6)
     setting_button.row(button_7, button_8)
+    setting_button.row(button_9)
     setting_button.row(button_exit)
     
     return setting_button
@@ -357,6 +358,7 @@ def save_settings():
         f.write(f'ventilation_reminders = {settings.ventilation_reminders}\n')
         f.write(f'omega3_reminders = {settings.omega3_reminders}\n')
         f.write(f'vitamin_d3_reminders = {settings.vitamin_d3_reminders}\n')
+        f.write(f'time_reminder = {settings.time_reminder}\n')
     print("[LOG] Settings successfully saved to file")
 
 @bot.message_handler(regexp='/start')
@@ -442,6 +444,16 @@ def ventilation_reminder(command):
     updated_markup = update_main_button()
     bot.send_message(command.chat.id, '⚙️ Ventilation reminders settings updated', reply_markup=updated_markup)
     print(f"[LOG] Ventilation reminders setting changed to: {settings.ventilation_reminders}")
+
+@bot.message_handler(regexp='Time reminder')
+def timereminder(command):
+    print(f"[USER ACTION] User {command.chat.id} toggled Time reminder setting")
+    bot.delete_message(command.chat.id, command.id)
+    settings.time_reminder = not settings.time_reminder
+    save_settings()
+    updated_markup = update_main_button()
+    bot.send_message(command.chat.id, '⚙️ Time reminders settings updated', reply_markup=updated_markup)
+    print(f"[LOG] Time reminder reminders setting changed to: {settings.time_reminder}")
 
 @bot.message_handler(regexp="Phonk")
 def music(command):
