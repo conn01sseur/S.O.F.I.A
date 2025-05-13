@@ -315,7 +315,6 @@ setting_button = update_main_button()
 @bot.message_handler(regexp='Page 1')
 def page(command):
     chat_ids.add(command.chat.id)
-    save_chat_ids()
     print(f"[USER ACTION] User {command.chat.id} navigated to Page 1")
     bot.delete_message(command.chat.id, command.id)
     bot.send_message(command.chat.id, "Page 1", reply_markup=main_button_1)
