@@ -293,10 +293,10 @@ def update_main_button():
         print("[LOG] Vitamin D3 reminders setting is currently DISABLED")
     
     if settings.time_reminder:
-        button_9 = telebot.types.KeyboardButton('🟢 Time reminder')
+        button_9 = telebot.types.KeyboardButton('🟢 Time_reminder_nada')
         print("[LOG] Time reminders setting is currently ENABLED")
     else:
-        button_9 = telebot.types.KeyboardButton('🔴 Time reminder')
+        button_9 = telebot.types.KeyboardButton('🔴 Time_reminder_nada')
         print("[LOG] Time reminders setting is currently DISABLED")
 
     button_exit = telebot.types.KeyboardButton('⬅️ Exit')
@@ -444,7 +444,7 @@ def ventilation_reminder(command):
     bot.send_message(command.chat.id, '⚙️ Ventilation reminders settings updated', reply_markup=updated_markup)
     print(f"[LOG] Ventilation reminders setting changed to: {settings.ventilation_reminders}")
 
-@bot.message_handler(regexp='Time reminder')
+@bot.message_handler(regexp='Time_reminder_nada')
 def timereminder(command):
     print(f"[USER ACTION] User {command.chat.id} toggled Time reminder setting")
     bot.delete_message(command.chat.id, command.id)
