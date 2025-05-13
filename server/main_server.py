@@ -8,18 +8,18 @@ import socket
 import json
 import random
 
-print("[LOG] Importing settings...")
+print("[LOG] Importing settings and config...")
 import settings
-
+import config
 print("[LOG] Initializing bot with API token...")
-bot = telebot.TeleBot(settings.api)
+bot = telebot.TeleBot(config.api)
 bot.remove_webhook()
 
-chat_ids = {settings.chat_id}
-print(f"[SYSTEM] Added predefined chat_id {settings.chat_id} to notifications list")
+chat_ids = {config.chat_id}
+print(f"[SYSTEM] Added predefined chat_id {config.chat_id} to notifications list")
 
-host = settings.host
-port = settings.port
+host = config.host
+port = config.port
 
 connected_clients = []
 socket_lock = threading.Lock()
