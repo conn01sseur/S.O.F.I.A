@@ -291,6 +291,13 @@ def update_main_button():
     else:
         button_8 = telebot.types.KeyboardButton('🔴 Vitamin D3 reminders')
         print("[LOG] Vitamin D3 reminders setting is currently DISABLED")
+    
+    if settings.time_reminder:
+        button_9 = telebot.types.KeyboardButton('🟢 Time reminder')
+        print("[LOG] Time reminders setting is currently ENABLED")
+    else:
+        button_9 = telebot.types.KeyboardButton('🔴 Time reminder')
+        print("[LOG] Time reminders setting is currently DISABLED")
 
     button_exit = telebot.types.KeyboardButton('⬅️ Exit')
     
