@@ -45,8 +45,3 @@ bunner = f'''
     version: {version_sofia}'''
 
 print(bunner)
-
-if os.getlogin() == "root":
-    print(f"Pshol nahui root")
-else:
-    print(f"Hello {os.getlogin()}")
