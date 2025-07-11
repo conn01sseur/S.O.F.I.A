@@ -10,6 +10,8 @@ import random
 
 print("[LOG] Importing settings and config...")
 import settings
+
+
 import config
 print("[LOG] Initializing bot with API token...")
 bot = telebot.TeleBot(config.api)
@@ -18,100 +20,10 @@ bot.remove_webhook()
 chat_ids = {config.chat_id}
 print(f"[SYSTEM] Added predefined chat_id {config.chat_id} to notifications list")
 
-host = config.host
-port = config.port
-
 connected_clients = []
 socket_lock = threading.Lock()
 
 active_timers = {}
-
-def socket_server():
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind((host, port))
-    server.listen(5)
-    print(f"[SOCKET] Server is listening on {host}:{port}")
-    
-    while True:
-        try:
-            conn, addr = server.accept()
-            print(f"[SOCKET] Connection established from {addr}")
-            
-            with socket_lock:
-                connected_clients.append(conn)
-
-            client_thread = threading.Thread(
-                target=handle_client_connection,
-                args=(conn, addr),
-                daemon=True
-            )
-            client_thread.start()
-            
-        except Exception as e:
-            print(f"[SOCKET ERROR] Server accept error: {e}")
-            break
-
-def handle_client_connection(conn, addr):
-    try:
-        while True:
-            data = conn.recv(1024).decode('utf-8')
-            if not data:
-                break
-                
-            print(f"[SOCKET] Received from {addr}: {data}")
-            
-            try:
-                message_data = json.loads(data)
-                chat_id = message_data.get('chat_id')
-                text = message_data.get('text')
-                
-                if chat_id and text:
-                    bot.send_message(chat_id, f"🔌 From {addr[0]}: {text}")
-                    print(f"[SOCKET] Forwarded message to chat {chat_id}")
-                    
-                conn.send("Message received by server".encode('utf-8'))
-                
-            except json.JSONDecodeError:
-                print("[SOCKET] Received invalid JSON data")
-                conn.send("Invalid JSON format".encode('utf-8'))
-                
-    except Exception as e:
-        print(f"[SOCKET ERROR] Client {addr} connection error: {e}")
-    finally:
-        with socket_lock:
-            if conn in connected_clients:
-                connected_clients.remove(conn)
-        conn.close()
-        print(f"[SOCKET] Connection closed with {addr}")
-
-def send_to_all_clients(message):
-    with socket_lock:
-        if not connected_clients:
-            return False, "No devices connected"
-            
-        success = 0
-        failed = 0
-        responses = []
-        
-        for client in connected_clients.copy():
-            try:
-                client.sendall(message.encode('utf-8'))
-                print(f"[SOCKET] Sent message to {client.getpeername()}")
-                success += 1
-
-                response = client.recv(1024).decode('utf-8')
-                responses.append(response)
-                
-            except Exception as e:
-                print(f"[SOCKET ERROR] Failed to send to client: {e}")
-                failed += 1
-                connected_clients.remove(client)
-                
-        return True, f"Sent to {success} device(s), failed: {failed}. Responses: {responses}"
-
-socket_thread = threading.Thread(target=socket_server, daemon=True)
-socket_thread.start()
 
 print("[LOG] Creating keyboard layout - Page 1")
 main_button_1 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
