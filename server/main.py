@@ -28,6 +28,13 @@ try:
 except ImportError:
     print("[-] Telebot not installed")
 
+try:
+    import time
+    print("[+] Time library is installed")
+except ImportError:
+    print("[-] Time not installed")
+
+
 bunner = f'''
 ⢀⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣄
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦
@@ -42,6 +49,21 @@ bunner = f'''
 ⢻⣿⣿⣿⣿⣿⣿⣿⣿⡿⢋⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠈⠁
 ⠀⠹⣿⣿⡿⠿⠛⣋⣥⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 
-    version: {version_sofia}'''
+    version: {version_sofia}
+    host: {host}
+    port = {port}'''
 
 print(bunner)
+print("Check telegram bot...")
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(host, port)
+server.listen(6)
+print("Waiting client...")
+conn, addr = server.accept()
+print({addr})
+
+time.sleep(5)
+message = "telegram_bot"
+conn.sendall(message.encode('utf-8'))
+conn.close()
+server.close()

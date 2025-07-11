@@ -11,7 +11,7 @@ import random
 print("[LOG] Importing settings and config...")
 import settings
 
-
+# import your token and chat id
 import config
 print("[LOG] Initializing bot with API token...")
 bot = telebot.TeleBot(config.api)
@@ -19,6 +19,7 @@ bot.remove_webhook()
 
 chat_ids = {config.chat_id}
 print(f"[SYSTEM] Added predefined chat_id {config.chat_id} to notifications list")
+
 
 connected_clients = []
 socket_lock = threading.Lock()
