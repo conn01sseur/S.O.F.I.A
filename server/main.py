@@ -61,19 +61,6 @@ bunner = f'''
 print(bunner)
 print("Check telegram bot...")
 
-def message_client(client_socket, client_address):
-    while True:
-        try:
-            message = client_socket.recv(1024).decode('utf-8')
-            if message:
-                pass
-        except:
-            print(f"{ip_address} отключен.")
-            client_socket.close()
-            del clients[ip_address]
-            broadcast(f"Пользователь {ip_address} вышел.")
-            break
-
 def check_bots():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((host, port))
