@@ -56,11 +56,15 @@ bunner = f'''
 print(bunner)
 print("Check telegram bot...")
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(host, port)
+server.bind((host, port))
 server.listen(6)
-print("Waiting client...")
+print("Waiting bot...")
 conn, addr = server.accept()
-print({addr})
+data = server.recv(1024)
+#print({addr})
+
+if data == "telegram_bot":
+    print("Telegram bot added")
 
 time.sleep(5)
 message = "telegram_bot"
