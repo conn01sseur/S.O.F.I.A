@@ -20,9 +20,17 @@ bot.remove_webhook()
 chat_ids = {config.chat_id}
 print(f"[SYSTEM] Added predefined chat_id {config.chat_id} to notifications list")
 
-
-connected_clients = []
-socket_lock = threading.Lock()
+def send_server_checker():
+    print("Подключние к серверу")
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    while True:
+        try:
+            client_socket.connect((config.host, config.port))
+            message = "telegram_bot"
+            client_socket.send(message.encode)
+            break
+        except ConnectionRefusedError:
+            pass
 
 active_timers = {}
 
@@ -1061,6 +1069,7 @@ threading.Thread(target=send_messages, daemon=True).start()
 print("[SYSTEM] Starting bot...")
 while True:
     try:
+        send_server_checker()
         print("[SYSTEM] Starting bot polling...")
         bot.polling(none_stop=True, interval=0, timeout=20)
     except Exception as e:
