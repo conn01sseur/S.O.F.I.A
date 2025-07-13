@@ -34,6 +34,11 @@ try:
 except ImportError:
     print("[-] Time not installed")
 
+try:
+    import threading
+    print("[+] Threading library is installed")
+except ImportError:
+    print("[-] Threading not installed")
 
 bunner = f'''
 ⢀⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣄
@@ -55,19 +60,28 @@ bunner = f'''
 
 print(bunner)
 print("Check telegram bot...")
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((host, port))
-server.listen(6)
-print("Waiting bot...")
-conn, addr = server.accept()
-data = server.recv(1024)
-#print({addr})
 
-if data == "telegram_bot":
-    print("Telegram bot added")
+def message_client(client_socket, client_address):
+    while True:
+        try:
+            message = client_socket.recv(1024).decode('utf-8')
+            if message:
+                pass
+        except:
+            print(f"{ip_address} отключен.")
+            client_socket.close()
+            del clients[ip_address]
+            broadcast(f"Пользователь {ip_address} вышел.")
+            break
+
+def check_bots():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((host, port))
+    server.listen(6)
+    while True:
+        print("Waiting bot...")
+        conn, addr = server.accept()
 
 time.sleep(5)
 message = "telegram_bot"
 conn.sendall(message.encode('utf-8'))
-conn.close()
-server.close()
