@@ -12,6 +12,7 @@ import random
 import threading
 import time
 
+
 # Global
 
 bot = telebot.TeleBot(api)
