@@ -66,8 +66,6 @@ def handle_client(client_socket, addr):
     while True:
         try:
             message = client_socket.recv(1024).decode('utf-8')
-            if not message:
-                break
             #print(f"Received from {addr}: {message}")
             if message == "telegram_bot":
                 print("[+] Telegram Bot connected")
