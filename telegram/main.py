@@ -29,12 +29,15 @@ def check_server_connection():
 def telegram_bot():
     pass
 
+
+# Starting bot
+
 while True:
     try:
         check_server_connection()
         print("[SYSTEM] Starting bot polling...")
         bot.polling(none_stop = True, interval = 0, timeout = 20)
-    except:
+    except Exception as e:
         print(f"[ERROR] Bot crashed: {e}")
         print("[SYSTEM] Restarting bot in 3 seconds...")
         time.sleep(3)
