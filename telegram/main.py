@@ -7,7 +7,6 @@ from config import *
 # Imports 
 
 import telebot
-import socket
 import random
 import threading
 import time
@@ -21,21 +20,19 @@ bot.remove_webhook()
 print(f"[SYSTEM] Added predefined chat_id {chat_id} to notifications list")
 
 
-# Server function
-
-def check_server_connection():
-    pass
-
+# Main telegram bot function
 
 def telegram_bot():
-    pass
+    @bot.message_handler(regexp='start')
+    def start(command):
+        print("[LOG] ")
 
 
 # Starting bot
 
 while True:
     try:
-        check_server_connection()
+        # check_server_connection()
         print("[SYSTEM] Starting bot polling...")
         bot.polling(none_stop = True, interval = 0, timeout = 20)
     except Exception as e:
